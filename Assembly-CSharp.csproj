@@ -59,7 +59,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Node.cs" />
+    <Compile Include="Assets\Scripts\TTRBoard.cs" />
+    <Compile Include="Assets\Scripts\TTRConnection.cs" />
+    <Compile Include="Assets\Scripts\TTRNode.cs" />
+    <None Include="Assets\Graphics\notes.txt" />
     <Reference Include="Unity.PackageManagerUI.Editor">
       <HintPath>C:/Users/G00267682/Desktop/TTR/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
