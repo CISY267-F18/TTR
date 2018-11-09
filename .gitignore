@@ -1,0 +1,7 @@
+Library/
+Build/
+Packages/
+ProjectSettings/
+Temp/
+
+*.sln
