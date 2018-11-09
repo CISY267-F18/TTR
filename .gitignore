@@ -4,5 +4,6 @@ Packages/
 ProjectSettings/
 Temp/
 obj/
+.vs/
 
 *.sln
