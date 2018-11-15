@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
 public class TTRStatic {
     // "borrowed" this from SpaceShmup which "borrowed" this from a java project
@@ -14,5 +16,18 @@ public class TTRStatic {
 
     public static float AngleBetweenD(TTRNode source, TTRNode destination) {
         return Mathf.Rad2Deg * AngleBetween(source, destination);
+    }
+
+    public static List<string[]> ReadCSV(string csv) {
+        string[] lines = File.ReadAllText(csv).Split(new char[] { '\n' });
+
+        List<string[]> output = new List<string[]>();
+        foreach (string line in lines) {
+            if (line[0] != '#') {
+                output.Add(line.Split(new char[] { ',' }));
+            }
+        }
+        
+        return output;
     }
 }

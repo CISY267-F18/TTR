@@ -1,0 +1,31 @@
+# Value,Source,Destination,spaces,number of links
+4,Denver,El Paso,4,1
+5,Kansas City,Houston,5,2
+6,New York,Atlanta,6,2
+7,Chicago,New Orleans,7,2
+7,Calgary,Salt Lake City,7,1
+8,Helena,Los Angeles,8,2
+8,Duluth,Houston,8,4
+8,Sault Ste. Marie,Nashville,8,2
+9,Seattle,Los Angeles,9,2
+9,Sault Ste. Marie,Oklahoma City,8,3
+9,Montreal,Atlanta,9,3
+9,Chicago,Santa Fe,9,3
+10,Toronto,Miami,10,3
+10,Duluth,El Paso,10,3
+11,Winnipeg,Little Rock,11,4
+11,Denver,Pittsburgh,11,2
+11,Portland,Phoenix,11,2
+11,Dallas,New York,11,3
+12,Boston,Miami,12,4
+12,Winnipeg,Houston,12,5
+13,Calgary,Phoenix,13,2
+13,Montreal,New Orleans,13,4
+13,Vancouver,Santa Fe,13,3
+16,Los Angeles,Chicago,15,5
+17,San Francisco,Atlanta,17,5
+17,Portland,Nashville,17,4
+20,Vancouver,Montreal,20,3
+20,Los Angeles,Miami,19,4
+21,Los Angeles,New York,21,5
+22,Seattle,New York,20,4

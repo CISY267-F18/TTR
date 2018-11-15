@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class TTRBoard : MonoBehaviour {
@@ -15,7 +16,11 @@ public class TTRBoard : MonoBehaviour {
     private Transform containerNodes;
     private Transform containerConnections;
 
-    private HashSet<TTRNode> nodes;
+    private Dictionary<string, TTRNode> nodes;
+    private List<TTRCardConnection> deckConnections;
+
+    // game data
+    private const string gdConnections = "Assets/Data/travelcards.csv";
 
     private void Awake() {
         if (me != null) {
@@ -32,11 +37,9 @@ public class TTRBoard : MonoBehaviour {
         pointValues.Add(4, 7);
         pointValues.Add(5, 10);
         pointValues.Add(6, 15);
-    }
 
-    void Start () {
         // I'm not sure if this is going to be useful in the end but I'll keep it for now
-        nodes = new HashSet<TTRNode>();
+        nodes = new Dictionary<string, TTRNode>();
 
         TTRNode first = Spawn(-4, -4, "first").GetComponent<TTRNode>();
         TTRNode second = Spawn(0, -4, "second").GetComponent<TTRNode>();
@@ -62,14 +65,19 @@ public class TTRBoard : MonoBehaviour {
         fifth.AddOutboundNode(seventh, Color.yellow, 2).transform.SetParent(containerConnections);
         sixth.AddOutboundNode(seventh, Color.gray, 3).transform.SetParent(containerConnections);
 
-        nodes.Add(first);
-        nodes.Add(second);
-        nodes.Add(third);
-        nodes.Add(fourth);
-        nodes.Add(fifth);
-        nodes.Add(sixth);
-        nodes.Add(seventh);
-	}
+        nodes.Add("first", first);
+        nodes.Add("second", second);
+        nodes.Add("third", third);
+        nodes.Add("fourth", fourth);
+        nodes.Add("fifth", fifth);
+        nodes.Add("sixth", sixth);
+        nodes.Add("seventh", seventh);
+
+        List<string[]> ccdata = TTRStatic.ReadCSV(gdConnections);
+        foreach (string[] line in ccdata) {
+            deckConnections.Add(new TTRCardConnection(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
+        }
+    }
 
     private GameObject Spawn(float x, float y, string name) {
         GameObject created = Instantiate(prefabNode);

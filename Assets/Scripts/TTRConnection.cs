@@ -24,8 +24,7 @@ public class TTRConnection : MonoBehaviour {
         this.distance = distance;
 
         float angle = TTRStatic.AngleBetweenD(source, destination);
-        Debug.Log(angle);
-
+        
         for (int i = 0; i < distance; i++) {
             GameObject nova = Instantiate(TTRBoard.me.prefabConnectionMarker);
             float f = ((i + 1) * 1.0f) / (distance + 1);
