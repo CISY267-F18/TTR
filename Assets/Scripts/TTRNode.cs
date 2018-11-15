@@ -9,14 +9,16 @@ public class TTRNode : MonoBehaviour {
         outbound = new List<TTRConnection>();
     }
 
-    public void AddOutboundNode(TTRNode destination, Color color) {
+    public TTRConnection AddOutboundNode(TTRNode destination, Color color, int distance) {
         // creates a two-way link between this and destination, so you only
         // have to call it once for each pair
 
         TTRConnection connection = Instantiate(TTRBoard.me.prefabConnection).GetComponent<TTRConnection>();
-        connection.Set(this, destination, color);
+        connection.Set(this, destination, color, distance);
         
         outbound.Add(connection);
         destination.outbound.Add(connection);
+
+        return connection;
     }
 }

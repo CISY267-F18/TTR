@@ -6,6 +6,14 @@ public class TTRBoard : MonoBehaviour {
 
     public GameObject prefabNode;
     public GameObject prefabConnection;
+    // remind me to make this some kind of trapezoidal model at some point in time so the
+    // edges are shaded a bit and it looks less flag
+    public GameObject prefabConnectionMarker;
+
+    public static Dictionary<int, int> pointValues = new Dictionary<int, int>();
+
+    private Transform containerNodes;
+    private Transform containerConnections;
 
     private HashSet<TTRNode> nodes;
 
@@ -14,6 +22,16 @@ public class TTRBoard : MonoBehaviour {
             throw new System.Exception("please don't spawn multiple boards");
         }
         me = this;
+
+        containerNodes = new GameObject("all nodes go here").transform;
+        containerConnections = new GameObject("all connections go here").transform;
+        
+        pointValues.Add(1, 1);
+        pointValues.Add(2, 2);
+        pointValues.Add(3, 4);
+        pointValues.Add(4, 7);
+        pointValues.Add(5, 10);
+        pointValues.Add(6, 15);
     }
 
     void Start () {
@@ -28,14 +46,21 @@ public class TTRBoard : MonoBehaviour {
         TTRNode sixth = Spawn(-4, 4, "sixth").GetComponent<TTRNode>();
         TTRNode seventh = Spawn(4, 4, "seventh").GetComponent<TTRNode>();
 
-        first.AddOutboundNode(second, Color.red);
-        first.AddOutboundNode(third, Color.blue);
-        third.AddOutboundNode(fourth, Color.green);
-        third.AddOutboundNode(fifth, Color.blue);
-        fourth.AddOutboundNode(fifth, Color.blue);
-        fifth.AddOutboundNode(sixth, Color.red);
-        fifth.AddOutboundNode(seventh, Color.yellow);
-        sixth.AddOutboundNode(seventh, Color.gray);
+        first.transform.SetParent(containerNodes);
+        second.transform.SetParent(containerNodes);
+        third.transform.SetParent(containerNodes);
+        fourth.transform.SetParent(containerNodes);
+        fifth.transform.SetParent(containerNodes);
+        sixth.transform.SetParent(containerNodes);
+        seventh.transform.SetParent(containerNodes);
+
+        first.AddOutboundNode(second, Color.red, 2).transform.SetParent(containerConnections);
+        first.AddOutboundNode(third, Color.blue, 2).transform.SetParent(containerConnections);
+        third.AddOutboundNode(fourth, Color.green, 1).transform.SetParent(containerConnections);
+        third.AddOutboundNode(fifth, Color.blue, 1).transform.SetParent(containerConnections);
+        fifth.AddOutboundNode(sixth, Color.red, 4).transform.SetParent(containerConnections);
+        fifth.AddOutboundNode(seventh, Color.yellow, 2).transform.SetParent(containerConnections);
+        sixth.AddOutboundNode(seventh, Color.gray, 3).transform.SetParent(containerConnections);
 
         nodes.Add(first);
         nodes.Add(second);
