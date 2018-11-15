@@ -73,6 +73,9 @@ public class TTRBoard : MonoBehaviour {
         nodes.Add("sixth", sixth);
         nodes.Add("seventh", seventh);
 
+        // This currently crashes, but only because the nodes that the game is trying
+        // to pull out of the file don't exist yet (so next you should look up the
+        // city-node connecions)
         List<string[]> ccdata = TTRStatic.ReadCSV(gdConnections);
         foreach (string[] line in ccdata) {
             deckConnections.Add(new TTRCardConnection(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
