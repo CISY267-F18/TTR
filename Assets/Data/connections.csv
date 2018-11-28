@@ -33,3 +33,68 @@ Atlanta,Charleston,2,Free
 Atlanta,Raleigh,2,Free
 Atlanta,Raleigh,2,Free
 Pittsburgh,Raleigh,2,Free
+New Orleans,Atlanta,4,Yellow
+New Orleans,Atlanta,4,Orange
+Nashville,Atlanta,1,Free
+Nashville,Raleigh,3,Black
+Nashville,Pittsburgh,4,Yellow
+Pittsburgh,Saint Louis,5,Green
+Pittsburgh,Chicago,3,Black
+Pittsburgh,Chicago,3,Orange
+Chicago,Toronto,4,White
+Duluth,Toronto,6,Pink
+Chicago,Saint Louis,2,Green
+Chicago,Saint Louis,2,White,
+Chicago,Omaha,4,Blue
+Chicago,Duluth,3,Red
+Duluth,Omaha,2,Free
+Duluth,Omaha,2,Free
+Nashville,Saint Louis,2,Free
+Nashville,Little Rock,3,White
+Little Rock,New Orleans,3,Green
+Little Rock,Oklahoma City,2,Free
+Little Rock,Dallas,2,Free
+Little Rock,Saint Louis,2,Free
+Houston,New Orleans,2,Free
+Houston,Dallas,1,Free
+Houston,Dallas,1,Free
+Houston,El Paso,6,Green
+Dallas,El Paso,4,Red
+Dallas,Oklahoma City,2,Free
+Dallas,Oklahoma City,2,Free
+Oklahoma City,El Paso,5,Yellow
+Oklahoma City,Santa Fe,3,Blue
+Oklahoma City,Denver,4,Red
+Oklahoma City,Kansas City,2,Free
+Oklahoma City,Kansas City,2,Free
+Kansas City,Saint Louis,2,Pink
+Kansas City,Saint Louis,2,Blue
+Kansas City,Omaha,1,Free
+Kansas City,Omaha,1,Free
+Kansas City,Denver,4,Orange
+Kansas City,Denver,4,Black
+Omaha,Denver,4,Pink
+Omaha,Helena,5,Red
+Denver,Helena,4,Green
+Denver,Omaha,4,Pink
+Denver,Santa Fe,2,Free
+Denver,Phoenix,5,White
+Denver,Salt Lake City,3,Yellow
+Denver,Salt Lake City,3,Red
+Santa Fe,Phoenix,3,Free
+Santa Fe,El Paso,2,Free
+Phoenix,El Paso,3,Free
+Los Angeles,Phoenix,3,Free
+Los Angeles,El Paso,6,Black
+Los Angeles,Las Vegas,2,Free
+Los Angeles,San Francisco,3,Pink
+Los Angeles,San Francisco,3,Yellow
+Las Vegas,Salt Lake City,3,Orange
+San Francisco,Salt Lake City,5,White
+San Francisco,Salt Lake City,5,Orange
+Helena,Salt Lake City,3,Pink
+Portland,San Francisco,5,Green
+Portland,San Francisco,5,Pink
+Portland,Salt Lake City,6,Blue
+Portland,Seattle,1,Free
+Portland,Seattle,1,Free
