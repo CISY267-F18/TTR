@@ -1,0 +1,2 @@
+ - all city connections are in the file, but they don't all appear because some of them (some city connections have two lines) overlap
+ - may be a good idea to make the routes follow a parabola instead of a straight line, i.e. LA to El Paso

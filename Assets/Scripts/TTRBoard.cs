@@ -27,6 +27,12 @@ public class TTRBoard : MonoBehaviour {
     private const string gdSettings = "Assets/Data/settings.txt";
     private const string gdColors = "Assets/Data/colors.csv";
 
+    // board settings
+    private int originalWidth;
+    private int originalHeight;
+    private float cameraWidth;
+    private float cameraHeight;
+
     private void Awake() {
         if (me != null) {
             throw new System.Exception("please don't spawn multiple boards");
@@ -57,14 +63,15 @@ public class TTRBoard : MonoBehaviour {
         }
 
         List<string> settings = TTRStatic.ReadText(gdSettings);
-        int ow = int.Parse(settings[0]);
-        int oh = int.Parse(settings[1]);
-        float ch = Camera.main.orthographicSize * 2f;
-        float cw = ch * Camera.main.aspect;
+        originalWidth = int.Parse(settings[0]);
+        originalHeight = int.Parse(settings[1]);
+        cameraHeight = Camera.main.orthographicSize * 2f;
+        cameraWidth = cameraHeight * Camera.main.aspect;
 
         ccdata = TTRStatic.ReadCSV(gdNodes);
         foreach (string[] line in ccdata) {
-            nodes.Add(line[0], Spawn(int.Parse(line[1])*cw/ow-cw/2, ch / 2-int.Parse(line[2])*ch/oh, line[0]).GetComponent<TTRNode>());
+            nodes.Add(line[0], Spawn(TranslateCoordinateX(int.Parse(line[1])), TranslateCoordinateY(int.Parse(line[2])),
+                    line[0], TranslateCoordinateX(int.Parse(line[3])), TranslateCoordinateY(int.Parse(line[4]))).GetComponent<TTRNode>());
         }
         
         ccdata = TTRStatic.ReadCSV(gdTravelRoutes);
@@ -74,32 +81,31 @@ public class TTRBoard : MonoBehaviour {
         
         ccdata = TTRStatic.ReadCSV(gdConnections);
         foreach (string[] line in ccdata) {
-            if (!nodes.ContainsKey(line[0])) {
-                Debug.Log("Did not find: " + line[0]);
-            }
-            if (!nodes.ContainsKey(line[1])) {
-                Debug.Log("Did not find: " + line[1]);
-            }
-            /*if (colorValues.ContainsKey(line[3].Trim())) {
-                Debug.Log("Found color: " + line[3]);
-            } else {
-                Debug.Log("Did not find color: " + line[3]);
-            }*/
             Connect(nodes[line[0]], nodes[line[1]], int.Parse(line[2]), colorValues[line[3].Trim()]);
         }
     }
 
-    private GameObject Spawn(float x, float y, string name) {
+    private GameObject Spawn(float x, float y, string name, float textx, float texty) {
         GameObject created = Instantiate(prefabNode);
         Vector3 position = created.transform.position;
         position.x = x;
         position.y = y;
         created.transform.position = position;
         created.name = name;
-        created.GetComponentInChildren<TextMesh>().text = name;
+
+        TextMesh text = created.GetComponentInChildren<TextMesh>();
+        text.text = name;
+        position = text.transform.position;
+        position.x = textx;
+        position.y = texty;
+        text.transform.position = position;
 
         created.transform.parent = containerNodes;
         return created;
+    }
+
+    private GameObject Spawn(float x, float y, string name) {
+        return Spawn(x, y, name, x, y);
     }
 
     private TTRConnection Connect(TTRNode source, TTRNode destination, int distance, Color color) {
@@ -109,5 +115,13 @@ public class TTRBoard : MonoBehaviour {
         connection.transform.parent = containerConnections;
 
         return connection;
+    }
+
+    private float TranslateCoordinateY(float n) {
+        return cameraHeight / 2 - n * cameraHeight / originalHeight;
+    }
+
+    private float TranslateCoordinateX(float n) {
+        return n * cameraWidth / originalWidth - cameraWidth / 2;
     }
 }

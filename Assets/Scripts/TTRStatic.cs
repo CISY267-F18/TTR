@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TTRStatic {
     // "borrowed" this from SpaceShmup which "borrowed" this from a java project
@@ -42,5 +43,19 @@ public class TTRStatic {
         }
 
         return output;
+    }
+
+    public static int TextWidth(string message, Font font, int fontSize) {
+        int len = 0;
+        
+        CharacterInfo characterInfo = new CharacterInfo();
+        char[] arr = message.ToCharArray();
+
+        foreach (char c in arr) {
+            font.GetCharacterInfo(c, out characterInfo, fontSize);
+            len = len + characterInfo.advance;
+        }
+
+        return len;
     }
 }
