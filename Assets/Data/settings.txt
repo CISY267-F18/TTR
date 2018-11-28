@@ -1,0 +1,3 @@
+# board width and height
+576
+364

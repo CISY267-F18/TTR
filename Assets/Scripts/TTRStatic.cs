@@ -23,11 +23,24 @@ public class TTRStatic {
 
         List<string[]> output = new List<string[]>();
         foreach (string line in lines) {
-            if (line[0] != '#') {
+            if (line.Length > 0 && line[0] != '#') {
                 output.Add(line.Split(new char[] { ',' }));
             }
         }
         
+        return output;
+    }
+
+    public static List<string> ReadText(string file) {
+        string[] lines = File.ReadAllText(file).Split(new char[] { '\n' });
+
+        List<string> output = new List<string>();
+        foreach (string line in lines) {
+            if (line[0] != '#') {
+                output.Add(line);
+            }
+        }
+
         return output;
     }
 }

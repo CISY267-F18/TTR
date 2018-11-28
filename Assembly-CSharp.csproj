@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\TTRNode.cs" />
     <Compile Include="Assets\Scripts\TTRStatic.cs" />
     <None Include="Assets\Graphics\notes.txt" />
+    <None Include="Assets\Data\settings.txt" />
     <Reference Include="Unity.PackageManagerUI.Editor">
       <HintPath>C:/Users/G00267682/Documents/TTR/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>

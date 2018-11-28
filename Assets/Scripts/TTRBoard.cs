@@ -11,7 +11,7 @@ public class TTRBoard : MonoBehaviour {
     // edges are shaded a bit and it looks less flag
     public GameObject prefabConnectionMarker;
 
-    public static Dictionary<int, int> pointValues = new Dictionary<int, int>();
+    public static Dictionary<int, int> pointValues;
 
     private Transform containerNodes;
     private Transform containerConnections;
@@ -21,6 +21,8 @@ public class TTRBoard : MonoBehaviour {
 
     // game data
     private const string gdConnections = "Assets/Data/travelcards.csv";
+    private const string gdNodes = "Assets/Data/cities.csv";
+    private const string gdSettings = "Assets/Data/settings.txt";
 
     private void Awake() {
         if (me != null) {
@@ -30,7 +32,12 @@ public class TTRBoard : MonoBehaviour {
 
         containerNodes = new GameObject("all nodes go here").transform;
         containerConnections = new GameObject("all connections go here").transform;
-        
+
+        pointValues = new Dictionary<int, int>();
+        // I'm not sure if this is going to be useful in the end but I'll keep it for now
+        nodes = new Dictionary<string, TTRNode>();
+        deckConnections = new List<TTRCardConnection>();
+
         pointValues.Add(1, 1);
         pointValues.Add(2, 2);
         pointValues.Add(3, 4);
@@ -38,45 +45,21 @@ public class TTRBoard : MonoBehaviour {
         pointValues.Add(5, 10);
         pointValues.Add(6, 15);
 
-        // I'm not sure if this is going to be useful in the end but I'll keep it for now
-        nodes = new Dictionary<string, TTRNode>();
+        List<string> settings = TTRStatic.ReadText(gdSettings);
+        int ow = int.Parse(settings[0]);
+        int oh = int.Parse(settings[1]);
+        float ch = Camera.main.orthographicSize * 2f;
+        float cw = ch * Camera.main.aspect;
 
-        TTRNode first = Spawn(-4, -4, "first").GetComponent<TTRNode>();
-        TTRNode second = Spawn(0, -4, "second").GetComponent<TTRNode>();
-        TTRNode third = Spawn(0, 0, "third").GetComponent<TTRNode>();
-        TTRNode fourth = Spawn(-4, 0, "fourth").GetComponent<TTRNode>();
-        TTRNode fifth = Spawn(4, 0, "fifth").GetComponent<TTRNode>();
-        TTRNode sixth = Spawn(-4, 4, "sixth").GetComponent<TTRNode>();
-        TTRNode seventh = Spawn(4, 4, "seventh").GetComponent<TTRNode>();
-
-        first.transform.SetParent(containerNodes);
-        second.transform.SetParent(containerNodes);
-        third.transform.SetParent(containerNodes);
-        fourth.transform.SetParent(containerNodes);
-        fifth.transform.SetParent(containerNodes);
-        sixth.transform.SetParent(containerNodes);
-        seventh.transform.SetParent(containerNodes);
-
-        first.AddOutboundNode(second, Color.red, 2).transform.SetParent(containerConnections);
-        first.AddOutboundNode(third, Color.blue, 2).transform.SetParent(containerConnections);
-        third.AddOutboundNode(fourth, Color.green, 1).transform.SetParent(containerConnections);
-        third.AddOutboundNode(fifth, Color.blue, 1).transform.SetParent(containerConnections);
-        fifth.AddOutboundNode(sixth, Color.red, 4).transform.SetParent(containerConnections);
-        fifth.AddOutboundNode(seventh, Color.yellow, 2).transform.SetParent(containerConnections);
-        sixth.AddOutboundNode(seventh, Color.gray, 3).transform.SetParent(containerConnections);
-
-        nodes.Add("first", first);
-        nodes.Add("second", second);
-        nodes.Add("third", third);
-        nodes.Add("fourth", fourth);
-        nodes.Add("fifth", fifth);
-        nodes.Add("sixth", sixth);
-        nodes.Add("seventh", seventh);
+        List<string[]> ccdata = TTRStatic.ReadCSV(gdNodes);
+        foreach (string[] line in ccdata) {
+            nodes.Add(line[0], Spawn(int.Parse(line[1])*cw/ow-cw/2, ch / 2-int.Parse(line[2])*ch/oh, line[0]).GetComponent<TTRNode>());
+        }
 
         // This currently crashes, but only because the nodes that the game is trying
         // to pull out of the file don't exist yet (so next you should look up the
         // city-node connecions)
-        List<string[]> ccdata = TTRStatic.ReadCSV(gdConnections);
+        ccdata = TTRStatic.ReadCSV(gdConnections);
         foreach (string[] line in ccdata) {
             deckConnections.Add(new TTRCardConnection(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
         }
@@ -88,7 +71,10 @@ public class TTRBoard : MonoBehaviour {
         position.x = x;
         position.y = y;
         created.transform.position = position;
+        created.name = "Node" + name;
+        created.GetComponentInChildren<TextMesh>().text = name;
 
+        created.transform.parent = containerNodes;
         return created;
     }
 }
