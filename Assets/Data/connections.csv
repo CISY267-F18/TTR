@@ -1,0 +1,35 @@
+Vancouver,Calgary,3,Free
+Vancouver,Seattle,1,Free
+Seattle,Calgary,4,Free
+Calgary,Winnipeg,6,White
+Calgary,Helena,4,Free
+Seattle,Helena,6,Yellow
+Helena,Winnipeg,4,Blue
+Winnipeg,Duluth,4,Black
+Helena,Duluth,6,Orange
+Winnipeg,Sault St. Marie,6,Free
+Duluth,Sault St. Marie,3,Free
+Sault St. Marie,Toronto,2,Free
+Sault St. Marie,Montreal,5,Black
+Toronto,Montreal,3,Free
+Montreal,New York,3,Blue
+Montreal,Boston,2,Free
+Montreal,Boston,2,Free
+Boston,New York,2,Yellow
+Boston,New York,2,Red
+New York,Washington,2,Black
+New York,Washington,2,Orange
+New York,Pittsburgh,2,Green
+New York,Pittsburgh,2,White
+Pittsburgh,Washington,2,Free
+Toronto,Pittsburgh,2,Free
+Washington,Raleigh,2,Free
+Washington,Raleigh,2,Free
+Raleigh,Charleston,2,Free
+Charleston,Miami,4,Pink
+Miami,Atlanta,5,Blue
+Miami,New Orleans,6,Red
+Atlanta,Charleston,2,Free
+Atlanta,Raleigh,2,Free
+Atlanta,Raleigh,2,Free
+Pittsburgh,Raleigh,2,Free
