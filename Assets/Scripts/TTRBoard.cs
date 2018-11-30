@@ -8,8 +8,9 @@ public class TTRBoard : MonoBehaviour {
     public GameObject prefabNode;
     public GameObject prefabConnection;
     // remind me to make this some kind of trapezoidal model at some point in time so the
-    // edges are shaded a bit and it looks less flag
+    // edges are shaded a bit and it looks less flat
     public GameObject prefabConnectionMarker;
+    public GameObject prefabCard;
 
     public static Dictionary<int, int> pointValues;
     public static Dictionary<string, Color> colorValues;
