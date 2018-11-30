@@ -15,12 +15,14 @@ public class TTRBoard : MonoBehaviour {
     public static Dictionary<int, int> pointValues;
     public static Dictionary<string, Color> colorValues;
 
+    private List<TTRPlayer> players;
+
     private Transform containerNodes;
     private Transform containerConnections;
 
     private Dictionary<string, TTRNode> nodes;
     private TTRDeckTravelCards deckTravelCards;
-    private TTRDeckTrains deckCardTrains;
+    private TTRDeckTrains deckTrainCards;
     private TTRDeckTrains deckCardTrainDiscard;
 
     // game data
@@ -32,10 +34,22 @@ public class TTRBoard : MonoBehaviour {
     private const string gdTrainCards = "Assets/Data/deck.csv";
 
     // board settings
-    private int originalWidth;
-    private int originalHeight;
-    private float cameraWidth;
-    private float cameraHeight;
+    private float boardWidth;
+    private float boardHeight;
+
+    // some other settings
+    private const int playerStartingCards = 4;
+    private const int playerStartingTravelCardsMax = 3;
+    private const int playerStartingTravelCardsMin = 2;
+
+    // debug stuff
+    private readonly string[] debugNames = {
+        "Alice",
+        "Bob",
+        "Charlie",
+        "Delta",
+        "Echo",
+    };
 
     private void Awake() {
         if (me != null) {
@@ -70,15 +84,13 @@ public class TTRBoard : MonoBehaviour {
         }
 
         List<string> settings = TTRStatic.ReadText(gdSettings);
-        originalWidth = int.Parse(settings[0]);
-        originalHeight = int.Parse(settings[1]);
-        cameraHeight = Camera.main.orthographicSize * 2f;
-        cameraWidth = cameraHeight * Camera.main.aspect;
+        boardWidth = transform.localScale.x;
+        boardHeight = transform.localScale.y;
 
         ccdata = TTRStatic.ReadCSV(gdNodes);
         foreach (string[] line in ccdata) {
-            nodes.Add(line[0], Spawn(TranslateCoordinateX(int.Parse(line[1])), TranslateCoordinateY(int.Parse(line[2])),
-                    line[0], TranslateCoordinateX(int.Parse(line[3])), TranslateCoordinateY(int.Parse(line[4]))).GetComponent<TTRNode>());
+            nodes.Add(line[0], Spawn(TranslateCoordinateX(float.Parse(line[1])), TranslateCoordinateY(float.Parse(line[2])),
+                    line[0], TranslateCoordinateX(float.Parse(line[3])), TranslateCoordinateY(float.Parse(line[4]))).GetComponent<TTRNode>());
         }
 
         ccdata = TTRStatic.ReadCSV(gdConnections);
@@ -90,8 +102,8 @@ public class TTRBoard : MonoBehaviour {
          * Deck(s)
          */
 
-        deckCardTrains = new GameObject("Deck: Train Cards").AddComponent<TTRDeckTrains>();
-        deckCardTrains.transform.SetParent(this.transform);
+        deckTrainCards = new GameObject("Deck: Train Cards").AddComponent<TTRDeckTrains>();
+        deckTrainCards.transform.SetParent(this.transform);
 
         ccdata = TTRStatic.ReadCSV(gdTrainCards);
         
@@ -99,16 +111,16 @@ public class TTRBoard : MonoBehaviour {
             int n = int.Parse(line[1]);
             if (line[0].Equals("Rainbow")) {
                 for (var i = 0; i < n; i++) {
-                    deckCardTrains.AddCard(TTRCardRainbowTrain.Spawn(colorValues[line[0]]));
+                    deckTrainCards.AddCard(TTRCardRainbowTrain.Spawn(colorValues[line[0]]));
                 }
             } else {
                 for (var i = 0; i < n; i++) {
-                    deckCardTrains.AddCard(TTRCardTrain.Spawn(colorValues[line[0]]));
+                    deckTrainCards.AddCard(TTRCardTrain.Spawn(colorValues[line[0]]));
                 }
             }
         }
 
-        deckCardTrains.Shuffle();
+        deckTrainCards.Shuffle();
 
         deckCardTrainDiscard = new GameObject("Deck: Train Card Discard").AddComponent<TTRDeckTrains>();
         deckCardTrainDiscard.transform.SetParent(this.transform);
@@ -118,11 +130,18 @@ public class TTRBoard : MonoBehaviour {
 
         ccdata = TTRStatic.ReadCSV(gdTravelRoutes);
         foreach (string[] line in ccdata) {
-            deckTravelCards.AddCard(TTRCardConnection.Spawn(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
+            deckTravelCards.AddCard(TTRCardTravel.Spawn(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
         }
 
         deckTravelCards.Shuffle();
 
+        /*
+         * player(s)
+         */
+
+        players = new List<TTRPlayer>();
+
+        Begin(5);
     }
 
     private GameObject Spawn(float x, float y, string name, float textx, float texty) {
@@ -158,14 +177,43 @@ public class TTRBoard : MonoBehaviour {
     }
 
     private float TranslateCoordinateY(float n) {
-        return cameraHeight / 2 - n * cameraHeight / originalHeight;
+        return boardHeight / 2 - n * boardHeight;
     }
 
     private float TranslateCoordinateX(float n) {
-        return n * cameraWidth / originalWidth - cameraWidth / 2;
+        return n * boardWidth - boardWidth / 2;
     }
 
     private void ReassembleDeck() {
-        deckCardTrains.Reassemble(deckCardTrainDiscard);
+        deckTrainCards.Reassemble(deckCardTrainDiscard);
+    }
+
+    private void Begin(int playerCount) {
+        foreach (TTRPlayer player in players) {
+            Destroy(player);
+        }
+        players.Clear();
+
+        for (var i = 0; i < playerCount; i++) {
+            TTRPlayer np = new GameObject("Player" + i).AddComponent<TTRPlayer>();
+            players.Add(np);
+            np.gameObject.name = debugNames[i];
+        }
+
+        foreach (TTRPlayer player in players) {
+            for (var i=0; i<playerStartingCards; i++) {
+                player.GrantTrainCard(deckTrainCards.Draw());
+            }
+        }
+
+        foreach (TTRPlayer player in players) {
+            for (var i=0; i<playerStartingTravelCardsMax; i++) {
+                player.GrantTravelCard(deckTravelCards.Draw());
+            }
+        }
+
+        foreach (TTRPlayer player in players) {
+            player.Print();
+        }
     }
 }

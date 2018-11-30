@@ -1,3 +1,1 @@
-# board width and height
-576
-364
+# more settings probably?

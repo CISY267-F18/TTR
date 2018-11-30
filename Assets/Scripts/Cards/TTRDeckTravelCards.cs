@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TTRDeckTravelCards : MonoBehaviour {
-    private List<TTRCardConnection> contents;
+    private List<TTRCardTravel> contents;
     private System.Random randomize;
 
     void Awake() {
         randomize = new System.Random();
-        contents = new List<TTRCardConnection>();
+        contents = new List<TTRCardTravel>();
     }
 
-    public void AddCard(TTRCardConnection card) {
+    public void AddCard(TTRCardTravel card) {
         contents.Add(card);
         card.transform.SetParent(this.transform);
     }
 
-    public void AddCardToBottom(TTRCardConnection card) {
+    public void AddCardToBottom(TTRCardTravel card) {
         contents.Insert(0, card);
         card.transform.SetParent(this.transform);
     }
 
     public void Shuffle() {
-        List<TTRCardConnection> randomized = new List<TTRCardConnection>();
+        List<TTRCardTravel> randomized = new List<TTRCardTravel>();
 
         while (contents.Count > 0) {
             int n = randomize.Next(contents.Count - 1);
@@ -33,7 +33,7 @@ public class TTRDeckTravelCards : MonoBehaviour {
         contents = randomized;
     }
 
-    public TTRCardConnection Top() {
+    public TTRCardTravel Top() {
         if (contents.Count == 0) {
             throw new Exception("tried to check the top of an empty deck");
         }
@@ -41,19 +41,19 @@ public class TTRDeckTravelCards : MonoBehaviour {
         return contents[contents.Count - 1];
     }
 
-    public TTRCardConnection Draw() {
+    public TTRCardTravel Draw() {
         if (contents.Count == 0) {
             throw new Exception("tried to draw from an empty deck");
         }
 
         int n = contents.Count - 1;
-        TTRCardConnection card = contents[n];
+        TTRCardTravel card = contents[n];
         contents.RemoveAt(n);
         return card;
     }
 
     public void FinalizeDeck() {
-        foreach (TTRCardConnection card in contents) {
+        foreach (TTRCardTravel card in contents) {
             card.enabled = false;
         }
     }

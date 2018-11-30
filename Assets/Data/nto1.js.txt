@@ -1,0 +1,44 @@
+"use strict";
+const fs=require("fs");
+
+if (process.argv.length<4){
+	console.log("node nto1.js width height");
+} else {
+	const width=parseInt(process.argv[2]);
+	const height=parseInt(process.argv[3]);
+
+	fs.readFile("cities.csv", function(err, data){
+		if(err){
+			console.log("something went horribly wrong");
+		} else {
+			fs.writeFile("cities-new.csv", "", function(err){
+				if (err){
+						console.log("something went horribly wrong");
+					}
+			});
+			
+			var lines = data.toString().split('\n');
+			for (var i=0; i<lines.length; i++){
+				if (lines[i].length==0||lines[i].charAt(0)=="#"){
+					continue;
+				}
+				
+				var terms=lines[i].split(",");
+				
+				var city=terms[0];
+				var cityx=(parseInt(terms[1])/width).toFixed(2);
+				var cityy=(parseInt(terms[2])/height).toFixed(2);
+				var namex=(parseInt(terms[3])/width).toFixed(2);
+				var namey=(parseInt(terms[4])/height).toFixed(2);
+				// parabola vertex?
+				
+				var output=city+","+cityx+","+cityy+","+namex+","+namey+"\r\n";
+				fs.appendFile("cities-new.csv", output, function(err){
+					if (err){
+						console.log("something went horribly wrong");
+					}
+				});
+			}
+		}
+	});
+}
