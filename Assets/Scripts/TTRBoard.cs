@@ -19,7 +19,9 @@ public class TTRBoard : MonoBehaviour {
     private Transform containerConnections;
 
     private Dictionary<string, TTRNode> nodes;
-    private List<TTRCardConnection> deckTravelCards;
+    private TTRDeckTravelCards deckTravelCards;
+    private TTRDeckTrains deckCardTrains;
+    private TTRDeckTrains deckCardTrainDiscard;
 
     // game data
     private const string gdTravelRoutes = "Assets/Data/travelcards.csv";
@@ -27,6 +29,7 @@ public class TTRBoard : MonoBehaviour {
     private const string gdNodes = "Assets/Data/cities.csv";
     private const string gdSettings = "Assets/Data/settings.txt";
     private const string gdColors = "Assets/Data/colors.csv";
+    private const string gdTrainCards = "Assets/Data/deck.csv";
 
     // board settings
     private int originalWidth;
@@ -49,7 +52,6 @@ public class TTRBoard : MonoBehaviour {
         colorValues = new Dictionary<string, Color>();
         // I'm not sure if this is going to be useful in the end but I'll keep it for now
         nodes = new Dictionary<string, TTRNode>();
-        deckTravelCards = new List<TTRCardConnection>();
 
         pointValues.Add(1, 1);
         pointValues.Add(2, 2);
@@ -57,6 +59,10 @@ public class TTRBoard : MonoBehaviour {
         pointValues.Add(4, 7);
         pointValues.Add(5, 10);
         pointValues.Add(6, 15);
+
+        /*
+         * Board setup
+         */
 
         ccdata = TTRStatic.ReadCSV(gdColors);
         foreach (string[] line in ccdata) {
@@ -74,16 +80,49 @@ public class TTRBoard : MonoBehaviour {
             nodes.Add(line[0], Spawn(TranslateCoordinateX(int.Parse(line[1])), TranslateCoordinateY(int.Parse(line[2])),
                     line[0], TranslateCoordinateX(int.Parse(line[3])), TranslateCoordinateY(int.Parse(line[4]))).GetComponent<TTRNode>());
         }
-        
-        ccdata = TTRStatic.ReadCSV(gdTravelRoutes);
-        foreach (string[] line in ccdata) {
-            deckTravelCards.Add(new TTRCardConnection(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
-        }
-        
+
         ccdata = TTRStatic.ReadCSV(gdConnections);
         foreach (string[] line in ccdata) {
             Connect(nodes[line[0]], nodes[line[1]], int.Parse(line[2]), colorValues[line[3].Trim()]);
         }
+
+        /*
+         * Deck(s)
+         */
+
+        deckCardTrains = new GameObject("Deck: Train Cards").AddComponent<TTRDeckTrains>();
+        deckCardTrains.transform.SetParent(this.transform);
+
+        ccdata = TTRStatic.ReadCSV(gdTrainCards);
+        
+        foreach (string[] line in ccdata) {
+            int n = int.Parse(line[1]);
+            if (line[0].Equals("Rainbow")) {
+                for (var i = 0; i < n; i++) {
+                    deckCardTrains.AddCard(TTRCardRainbowTrain.Spawn(colorValues[line[0]]));
+                }
+            } else {
+                for (var i = 0; i < n; i++) {
+                    deckCardTrains.AddCard(TTRCardTrain.Spawn(colorValues[line[0]]));
+                }
+            }
+        }
+
+        deckCardTrains.Shuffle();
+
+        deckCardTrainDiscard = new GameObject("Deck: Train Card Discard").AddComponent<TTRDeckTrains>();
+        deckCardTrainDiscard.transform.SetParent(this.transform);
+        
+        deckTravelCards = new GameObject("Deck: Travel Cards").AddComponent<TTRDeckTravelCards>();
+        deckTravelCards.transform.SetParent(this.transform);
+
+        ccdata = TTRStatic.ReadCSV(gdTravelRoutes);
+        foreach (string[] line in ccdata) {
+            deckTravelCards.AddCard(TTRCardConnection.Spawn(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
+        }
+
+        deckTravelCards.Shuffle();
+
     }
 
     private GameObject Spawn(float x, float y, string name, float textx, float texty) {
@@ -124,5 +163,9 @@ public class TTRBoard : MonoBehaviour {
 
     private float TranslateCoordinateX(float n) {
         return n * cameraWidth / originalWidth - cameraWidth / 2;
+    }
+
+    private void ReassembleDeck() {
+        deckCardTrains.Reassemble(deckCardTrainDiscard);
     }
 }

@@ -61,7 +61,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Cards\TTRCardConnection.cs" />
     <Compile Include="Assets\Scripts\Cards\TTRCardTrain.cs" />
-    <Compile Include="Assets\Scripts\Cards\TTRDeck.cs" />
+    <Compile Include="Assets\Scripts\Cards\TTRDeckTrains.cs" />
+    <Compile Include="Assets\Scripts\Cards\TTRDeckTravelCards.cs" />
     <Compile Include="Assets\Scripts\TTRBoard.cs" />
     <Compile Include="Assets\Scripts\TTRConnection.cs" />
     <Compile Include="Assets\Scripts\TTRNode.cs" />

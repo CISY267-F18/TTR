@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 
-public class TTRCardConnection {
+public class TTRCardConnection : MonoBehaviour {
     private TTRNode source;
     private TTRNode destination;
     private int points;
 
-    public TTRCardConnection(TTRNode source, TTRNode destination, int points) {
-        this.source = source;
-        this.destination = destination;
-        this.points = points;
+    public static TTRCardConnection Spawn(TTRNode source, TTRNode destination, int points) {
+        TTRCardConnection cc = new GameObject(source.name + "-" + destination.name).AddComponent<TTRCardConnection>();
+        cc.source = source;
+        cc.destination = destination;
+        cc.points = points;
+
+        return cc;
     }
 }

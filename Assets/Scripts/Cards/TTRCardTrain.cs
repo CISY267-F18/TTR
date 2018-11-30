@@ -5,9 +5,11 @@ using UnityEngine;
 public class TTRCardTrain : MonoBehaviour {
     protected Color color;
 
-    public static void Spawn(Color color) {
-        TTRCardTrain card = Instantiate(TTRBoard.me.prefabCard).GetComponent<TTRCardTrain>();
+    public static TTRCardTrain Spawn(Color color) {
+        TTRCardTrain card = Instantiate(TTRBoard.me.prefabCard).AddComponent<TTRCardTrain>();
         card.SetColor(color);
+
+        return card;
     }
 
     public virtual bool IsUsable() {
@@ -15,6 +17,7 @@ public class TTRCardTrain : MonoBehaviour {
     }
 
     public void SetColor(Color color) {
+        this.name = color.ToString();
         this.color = color;
         // todo cards aren't recolored, the different colors actually have different
         // faces, so put the sprites in a hashmap of Color or something
@@ -22,6 +25,12 @@ public class TTRCardTrain : MonoBehaviour {
 }
 
 public class TTRCardRainbowTrain : TTRCardTrain {
+    public static new TTRCardRainbowTrain Spawn(Color color) {
+        TTRCardRainbowTrain card = Instantiate(TTRBoard.me.prefabCard).AddComponent<TTRCardRainbowTrain>();
+        card.SetColor(color);
+
+        return card;
+    }
 
     // rainbow cards are always usable on any color
     public override bool IsUsable() {

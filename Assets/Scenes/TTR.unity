@@ -340,3 +340,4 @@ MonoBehaviour:
     type: 2}
   prefabConnectionMarker: {fileID: 1403655351735968, guid: 1f13e606f900540438921020d338e25d,
     type: 2}
+  prefabCard: {fileID: 1738373325860688, guid: e73a6d757f8b6154ea26afd331d98797, type: 2}
