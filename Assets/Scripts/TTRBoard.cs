@@ -48,9 +48,9 @@ public class TTRBoard : MonoBehaviour {
     private GameObject scrTicketDeck;
     private GameObject scrTrainCardDeck;
 
-    private PositionFaceup pfaceup;
-    private PositionActivePlayer pactive;
-    private PositionOtherPlayers pother;
+    public PositionFaceup pfaceup;
+    public PositionActivePlayer pactive;
+    public PositionOtherPlayers pother;
 
     // debug stuff
     private readonly string[] debugNames = {
@@ -253,21 +253,29 @@ public class TTRBoard : MonoBehaviour {
                 player.GrantTravelCard(deckTravelCards.Draw());
             }
         }
+
+        // for the sake of making everything slightly easier when it comes to animating things,
+        // all of the players' cards are where you would physically expect them to be on the board
+        // if you were playing the real game, even though there's no other reason to do that
+        TTRPlayer.PositionAllCards(false);
     }
 
     private void BeginTurn(TTRPlayer player) {
         TTRUIStatusText.Create(player.name + " is now acting");
+
         myTurn = player;
+
+        TTRPlayer.PositionAllCards(player);
     }
 
-    private struct PositionFaceup {
+    public struct PositionFaceup {
         public Vector3[] cardPositions;
         public PositionFaceup(Vector3[] cardPositions) {
             this.cardPositions = cardPositions;
         }
     }
 
-    private struct PositionActivePlayer {
+    public struct PositionActivePlayer {
         public Vector3 tickets;
         public Vector3 trains;
         public Dictionary<string, Vector3> colors;
@@ -278,7 +286,7 @@ public class TTRBoard : MonoBehaviour {
         }
     }
 
-    private struct PositionOtherPlayers {
+    public struct PositionOtherPlayers {
         public Vector3[] otherPositions;
         public PositionOtherPlayers(Vector3[] otherPositions) {
             this.otherPositions = otherPositions;
