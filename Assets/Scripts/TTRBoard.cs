@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TTRBoard : MonoBehaviour {
     public static TTRBoard me = null;
@@ -52,11 +52,15 @@ public class TTRBoard : MonoBehaviour {
     };
 
     private void Awake() {
+        // singleton?
         if (me != null) {
             throw new System.Exception("please don't spawn multiple boards");
         }
         me = this;
+        
+        TTRUIStatusText.Create("status message");
 
+        // game data
         List<string[]> ccdata;
 
         containerNodes = new GameObject("all nodes go here").transform;
@@ -195,9 +199,7 @@ public class TTRBoard : MonoBehaviour {
         players.Clear();
 
         for (var i = 0; i < playerCount; i++) {
-            TTRPlayer np = new GameObject("Player" + i).AddComponent<TTRPlayer>();
-            players.Add(np);
-            np.gameObject.name = debugNames[i];
+            players.Add(new GameObject(debugNames[i]).AddComponent<TTRPlayer>());
         }
 
         foreach (TTRPlayer player in players) {

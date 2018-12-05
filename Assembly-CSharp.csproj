@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\TTRNode.cs" />
     <Compile Include="Assets\Scripts\TTRPlayer.cs" />
     <Compile Include="Assets\Scripts\TTRStatic.cs" />
+    <Compile Include="Assets\Scripts\UI Stuff\TTRUIStatusText.cs" />
     <None Include="Assets\Graphics\notes.txt" />
     <None Include="Assets\Data\settings.txt" />
     <None Include="Assets\Data\notes.txt" />
