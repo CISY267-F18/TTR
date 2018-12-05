@@ -25,6 +25,8 @@ public class TTRBoard : MonoBehaviour {
     private TTRDeckTrains deckTrainCards;
     private TTRDeckTrains deckCardTrainDiscard;
 
+    private TTRPlayer myTurn;
+
     // game data
     private const string gdTravelRoutes = "Assets/Data/travelcards.csv";
     private const string gdConnections = "Assets/Data/connections.csv";
@@ -42,6 +44,14 @@ public class TTRBoard : MonoBehaviour {
     private const int playerStartingTravelCardsMax = 3;
     private const int playerStartingTravelCardsMin = 2;
 
+    // ui/screen stuff
+    private GameObject scrTicketDeck;
+    private GameObject scrTrainCardDeck;
+
+    private PositionFaceup pfaceup;
+    private PositionActivePlayer pactive;
+    private PositionOtherPlayers pother;
+
     // debug stuff
     private readonly string[] debugNames = {
         "Alice",
@@ -57,8 +67,13 @@ public class TTRBoard : MonoBehaviour {
             throw new System.Exception("please don't spawn multiple boards");
         }
         me = this;
-        
-        TTRUIStatusText.Create("status message");
+
+        /*
+         * screen definitions
+         */
+
+        scrTicketDeck = GameObject.FindGameObjectWithTag("screen/ticketdeck");
+        scrTrainCardDeck = GameObject.FindGameObjectWithTag("screen/traincarddeck");
 
         // game data
         List<string[]> ccdata;
@@ -106,8 +121,7 @@ public class TTRBoard : MonoBehaviour {
          * Deck(s)
          */
 
-        deckTrainCards = new GameObject("Deck: Train Cards").AddComponent<TTRDeckTrains>();
-        deckTrainCards.transform.SetParent(this.transform);
+        deckTrainCards = scrTrainCardDeck.AddComponent<TTRDeckTrains>();
 
         ccdata = TTRStatic.ReadCSV(gdTrainCards);
         
@@ -127,10 +141,9 @@ public class TTRBoard : MonoBehaviour {
         deckTrainCards.Shuffle();
 
         deckCardTrainDiscard = new GameObject("Deck: Train Card Discard").AddComponent<TTRDeckTrains>();
-        deckCardTrainDiscard.transform.SetParent(this.transform);
+        deckCardTrainDiscard.gameObject.SetActive(false);
         
-        deckTravelCards = new GameObject("Deck: Travel Cards").AddComponent<TTRDeckTravelCards>();
-        deckTravelCards.transform.SetParent(this.transform);
+        deckTravelCards = scrTicketDeck.AddComponent<TTRDeckTravelCards>();
 
         ccdata = TTRStatic.ReadCSV(gdTravelRoutes);
         foreach (string[] line in ccdata) {
@@ -145,7 +158,34 @@ public class TTRBoard : MonoBehaviour {
 
         players = new List<TTRPlayer>();
 
-        Begin(5);
+        Setup(5);
+
+        /*
+         * screen positions
+         */
+
+        Vector3[] cp = new Vector3[5];
+        for (int i = 0; i < 5; i++) {
+            cp[i] = GameObject.FindGameObjectWithTag("screen/up/" + i).transform.position;
+        }
+        pfaceup = new PositionFaceup(cp);
+        Dictionary<string, Vector3> cpd = new Dictionary<string, Vector3>();
+        foreach (string value in colorValues.Keys) {
+            try {
+                cpd.Add(value, GameObject.FindGameObjectWithTag("screen/active/" + value.ToLower()).transform.position);
+            } catch (System.Exception e) {
+                // guess not
+            }
+        }
+        pactive = new PositionActivePlayer(GameObject.FindGameObjectWithTag("screen/active/tickets").transform.position,
+            GameObject.FindGameObjectWithTag("screen/active/trains").transform.position, cpd);
+        cp = new Vector3[players.Count-1];
+        for (var i=0; i<players.Count-1; i++) {
+            cp[i] = GameObject.FindGameObjectWithTag("screen/other/" + i).transform.position;
+        }
+        pother = new PositionOtherPlayers(cp);
+
+        BeginTurn(players[0]);
     }
 
     private GameObject Spawn(float x, float y, string name, float textx, float texty) {
@@ -192,7 +232,7 @@ public class TTRBoard : MonoBehaviour {
         deckTrainCards.Reassemble(deckCardTrainDiscard);
     }
 
-    private void Begin(int playerCount) {
+    private void Setup(int playerCount) {
         foreach (TTRPlayer player in players) {
             Destroy(player);
         }
@@ -213,9 +253,35 @@ public class TTRBoard : MonoBehaviour {
                 player.GrantTravelCard(deckTravelCards.Draw());
             }
         }
+    }
 
-        foreach (TTRPlayer player in players) {
-            player.Print();
+    private void BeginTurn(TTRPlayer player) {
+        TTRUIStatusText.Create(player.name + " is now acting");
+        myTurn = player;
+    }
+
+    private struct PositionFaceup {
+        public Vector3[] cardPositions;
+        public PositionFaceup(Vector3[] cardPositions) {
+            this.cardPositions = cardPositions;
+        }
+    }
+
+    private struct PositionActivePlayer {
+        public Vector3 tickets;
+        public Vector3 trains;
+        public Dictionary<string, Vector3> colors;
+        public PositionActivePlayer(Vector3 tickets, Vector3 trains, Dictionary<string, Vector3> colors) {
+            this.tickets = tickets;
+            this.trains = trains;
+            this.colors = colors;
+        }
+    }
+
+    private struct PositionOtherPlayers {
+        public Vector3[] otherPositions;
+        public PositionOtherPlayers(Vector3[] otherPositions) {
+            this.otherPositions = otherPositions;
         }
     }
 }
