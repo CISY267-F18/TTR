@@ -129,11 +129,11 @@ public class TTRBoard : MonoBehaviour {
             int n = int.Parse(line[1]);
             if (line[0].Equals("Rainbow")) {
                 for (var i = 0; i < n; i++) {
-                    deckTrainCards.AddCard(TTRCardRainbowTrain.Spawn(colorValues[line[0]]));
+                    deckTrainCards.AddCard(TTRCardRainbowTrain.Spawn(line[0]));
                 }
             } else {
                 for (var i = 0; i < n; i++) {
-                    deckTrainCards.AddCard(TTRCardTrain.Spawn(colorValues[line[0]]));
+                    deckTrainCards.AddCard(TTRCardTrain.Spawn(line[0]));
                 }
             }
         }
@@ -184,6 +184,11 @@ public class TTRBoard : MonoBehaviour {
             cp[i] = GameObject.FindGameObjectWithTag("screen/other/" + i).transform.position;
         }
         pother = new PositionOtherPlayers(cp);
+        
+        // for the sake of making everything slightly easier when it comes to animating things,
+        // all of the players' cards are where you would physically expect them to be on the board
+        // if you were playing the real game, even though there's no other reason to do that
+        TTRPlayer.PositionAllCards(false);
 
         BeginTurn(players[0]);
     }
@@ -253,11 +258,10 @@ public class TTRBoard : MonoBehaviour {
                 player.GrantTravelCard(deckTravelCards.Draw());
             }
         }
+    }
 
-        // for the sake of making everything slightly easier when it comes to animating things,
-        // all of the players' cards are where you would physically expect them to be on the board
-        // if you were playing the real game, even though there's no other reason to do that
-        TTRPlayer.PositionAllCards(false);
+    public Color colorValue(string name) {
+        return colorValues[name];
     }
 
     private void BeginTurn(TTRPlayer player) {

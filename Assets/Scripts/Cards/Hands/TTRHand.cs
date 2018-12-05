@@ -39,4 +39,10 @@ public class TTRHand<T> where T : MonoBehaviour {
 
         return str;
     }
+
+    public List<T> Contents {
+        get {
+            return this.contents;
+        }
+    }
 }
