@@ -36,12 +36,12 @@ public class TTRPlayer : MonoBehaviour {
     public void ActivateMyCards(bool animate = true) {
         // when activated, all cards emerge from the front of the queue at the top of the board.
         // you don't physically see them move around between turns (maybe a polish goal, though).
-        Vector3[] positions = TTRBoard.me.pother.otherPositions;
+        Transform[] positions = TTRBoard.me.pother.otherPositions;
         foreach (TTRCardTravel tc in travel.Contents) {
-            tc.transform.position = positions[0];
+            tc.transform.position = positions[0].position;
         }
         foreach (TTRCardTrain tc in hand.Contents) {
-            tc.transform.position = positions[0];
+            tc.transform.position = positions[0].position;
         }
         // if (animate) {
         if (false) {
@@ -49,10 +49,12 @@ public class TTRPlayer : MonoBehaviour {
         } else {
             TTRBoard board = TTRBoard.me;
             foreach (TTRCardTravel tc in travel.Contents) {
-                tc.transform.position = board.pactive.tickets;
+                tc.MoveTo(board.pactive.tickets);
+                tc.Revealed = true;
             }
             foreach (TTRCardTrain tc in hand.Contents) {
-                tc.transform.position = board.pactive.colors[tc.Color];
+                tc.MoveTo(board.pactive.colors[tc.Color]);
+                tc.Revealed = true;
             }
             // todo something with the note that says how many available trains you have remaining
         }
@@ -66,12 +68,14 @@ public class TTRPlayer : MonoBehaviour {
         if (false) {
 
         } else {
-            Vector3[] positions = TTRBoard.me.pother.otherPositions;
+            Transform[] positions = TTRBoard.me.pother.otherPositions;
             foreach (TTRCardTravel tc in travel.Contents) {
-                tc.transform.position = positions[positions.Length-1];
+                tc.MoveTo(positions[positions.Length - 1]);
+                tc.Revealed = false;
             }
             foreach (TTRCardTrain tc in hand.Contents) {
-                tc.transform.position = positions[positions.Length-1];
+                tc.MoveTo(positions[positions.Length - 1]);
+                tc.Revealed = false;
             }
         }
     }

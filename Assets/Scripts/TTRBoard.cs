@@ -17,16 +17,17 @@ public class TTRBoard : MonoBehaviour {
     public static Dictionary<string, Color> colorValues;
 
     private List<TTRPlayer> players;
+    private int playerCount;
 
     private Transform containerNodes;
     private Transform containerConnections;
+    private Transform containerTrainCards;
+    private Transform containerTravelCards;
 
     private Dictionary<string, TTRNode> nodes;
     private TTRDeckTravelCards deckTravelCards;
     private TTRDeckTrains deckTrainCards;
     private TTRDeckTrains deckCardTrainDiscard;
-
-    private TTRPlayer myTurn;
 
     // game data
     private const string gdTravelRoutes = "Assets/Data/travelcards.csv";
@@ -46,10 +47,8 @@ public class TTRBoard : MonoBehaviour {
     private const int playerStartingTravelCardsMin = 2;
 
     // ui/screen stuff
-    private GameObject scrTicketDeck;
-    private GameObject scrTrainCardDeck;
-
     public PositionFaceup pfaceup;
+    public PositionDecks pdecks;
     public PositionActivePlayer pactive;
     public PositionOtherPlayers pother;
 
@@ -69,18 +68,15 @@ public class TTRBoard : MonoBehaviour {
         }
         me = this;
 
-        /*
-         * screen definitions
-         */
-
-        scrTicketDeck = GameObject.FindGameObjectWithTag("screen/ticketdeck");
-        scrTrainCardDeck = GameObject.FindGameObjectWithTag("screen/traincarddeck");
-
         // game data
         List<string[]> ccdata;
 
+        playerCount = 5;
+
         containerNodes = new GameObject("all nodes go here").transform;
         containerConnections = new GameObject("all connections go here").transform;
+        containerTravelCards = new GameObject("all travel cards go here").transform;
+        containerTrainCards = new GameObject("all train cards go here").transform;
 
         pointValues = new Dictionary<int, int>();
         colorValues = new Dictionary<string, Color>();
@@ -121,10 +117,41 @@ public class TTRBoard : MonoBehaviour {
         }
 
         /*
+         * screen positions
+         */
+
+        Transform[] cp = new Transform[5];
+        for (int i = 0; i < 5; i++) {
+            cp[i] = GameObject.FindGameObjectWithTag("screen/up/" + i).transform;
+        }
+
+        pfaceup = new PositionFaceup(cp);
+        Dictionary<string, Transform> cpd = new Dictionary<string, Transform>();
+        foreach (string value in colorValues.Keys) {
+            try {
+                cpd.Add(value, GameObject.FindGameObjectWithTag("screen/active/" + value.ToLower()).transform);
+            }
+            catch (System.Exception e) {
+                Debug.Log("guess the tag " + "screen/active/" + value.ToLower() + " doesn't exist: " + e);
+            }
+        }
+
+        pdecks = new PositionDecks(GameObject.FindGameObjectWithTag("screen/traincarddeck").transform,
+            GameObject.FindGameObjectWithTag("screen/ticketdeck").transform);
+
+        pactive = new PositionActivePlayer(GameObject.FindGameObjectWithTag("screen/active/tickets").transform,
+            GameObject.FindGameObjectWithTag("screen/active/trains").transform, cpd);
+        cp = new Transform[playerCount - 1];
+        for (var i = 0; i < playerCount - 1; i++) {
+            cp[i] = GameObject.FindGameObjectWithTag("screen/other/" + i).transform;
+        }
+        pother = new PositionOtherPlayers(cp);
+
+        /*
          * Deck(s)
          */
 
-        deckTrainCards = scrTrainCardDeck.AddComponent<TTRDeckTrains>();
+        deckTrainCards = containerTrainCards.gameObject.AddComponent<TTRDeckTrains>();
 
         ccdata = TTRStatic.ReadCSV(gdTrainCards);
         
@@ -132,11 +159,15 @@ public class TTRBoard : MonoBehaviour {
             int n = int.Parse(line[1]);
             if (line[0].Equals("Rainbow")) {
                 for (var i = 0; i < n; i++) {
-                    deckTrainCards.AddCard(TTRCardRainbowTrain.Spawn(line[0]));
+                    TTRCardTrain nova = TTRCardRainbowTrain.Spawn(line[0]);
+                    nova.MoveTo(pdecks.train.transform);
+                    deckTrainCards.AddCard(nova);
                 }
             } else {
                 for (var i = 0; i < n; i++) {
-                    deckTrainCards.AddCard(TTRCardTrain.Spawn(line[0]));
+                    TTRCardTrain nova = TTRCardTrain.Spawn(line[0]);
+                    nova.MoveTo(pdecks.train.transform);
+                    deckTrainCards.AddCard(nova);
                 }
             }
         }
@@ -146,11 +177,13 @@ public class TTRBoard : MonoBehaviour {
         deckCardTrainDiscard = new GameObject("Deck: Train Card Discard").AddComponent<TTRDeckTrains>();
         deckCardTrainDiscard.gameObject.SetActive(false);
         
-        deckTravelCards = scrTicketDeck.AddComponent<TTRDeckTravelCards>();
+        deckTravelCards = containerTravelCards.gameObject.AddComponent<TTRDeckTravelCards>();
 
         ccdata = TTRStatic.ReadCSV(gdTravelRoutes);
         foreach (string[] line in ccdata) {
-            deckTravelCards.AddCard(TTRCardTravel.Spawn(nodes[line[1]], nodes[line[2]], int.Parse(line[0])));
+            TTRCardTravel nova = TTRCardTravel.Spawn(nodes[line[1]], nodes[line[2]], int.Parse(line[0]));
+            nova.MoveTo(pdecks.travel.transform);
+            deckTravelCards.AddCard(nova);
         }
 
         deckTravelCards.Shuffle();
@@ -161,39 +194,14 @@ public class TTRBoard : MonoBehaviour {
 
         players = new List<TTRPlayer>();
 
-        Setup(5);
-
-        /*
-         * screen positions
-         */
-
-        Vector3[] cp = new Vector3[5];
-        for (int i = 0; i < 5; i++) {
-            cp[i] = GameObject.FindGameObjectWithTag("screen/up/" + i).transform.position;
-        }
-        pfaceup = new PositionFaceup(cp);
-        Dictionary<string, Vector3> cpd = new Dictionary<string, Vector3>();
-        foreach (string value in colorValues.Keys) {
-            try {
-                cpd.Add(value, GameObject.FindGameObjectWithTag("screen/active/" + value.ToLower()).transform.position);
-            } catch (System.Exception e) {
-                // guess not
-            }
-        }
-        pactive = new PositionActivePlayer(GameObject.FindGameObjectWithTag("screen/active/tickets").transform.position,
-            GameObject.FindGameObjectWithTag("screen/active/trains").transform.position, cpd);
-        cp = new Vector3[players.Count-1];
-        for (var i=0; i<players.Count-1; i++) {
-            cp[i] = GameObject.FindGameObjectWithTag("screen/other/" + i).transform.position;
-        }
-        pother = new PositionOtherPlayers(cp);
+        Setup(playerCount);
         
         // for the sake of making everything slightly easier when it comes to animating things,
         // all of the players' cards are where you would physically expect them to be on the board
         // if you were playing the real game, even though there's no other reason to do that
         TTRPlayer.PositionAllCards(false);
 
-        BeginTurn(players[0]);
+        BeginTurn(0);
     }
 
     private GameObject Spawn(float x, float y, string name, float textx, float texty) {
@@ -278,38 +286,38 @@ public class TTRBoard : MonoBehaviour {
         return colorValues[name];
     }
 
-    private void BeginTurn(TTRPlayer player) {
-        TTRUIStatusText.Create(player.name + " is now acting");
+    private void BeginTurn(int index) {
+        TTRUIStatusText.Create(players[index].name + " is now acting");
 
-        myTurn = player;
-
-        TTRPlayer.PositionAllCards(player);
+        ActiveIndex = index;
+        TTRPlayer.PositionAllCards(true, players[index]);
     }
 
     public void Next() {
-        if (myTurn == null) {
-            throw new System.Exception("congratulations you broke the game loop");
-        }
+        BeginTurn(++ActiveIndex % players.Count);
+    }
 
-        for (int i=0; i<players.Count; i++) {
-            if (players[i] == myTurn) {
-                BeginTurn(players[++i % players.Count]);
-            }
+    public struct PositionDecks {
+        public Transform train;
+        public Transform travel;
+        public PositionDecks(Transform train, Transform travel) {
+            this.train = train;
+            this.travel = travel;
         }
     }
 
     public struct PositionFaceup {
-        public Vector3[] cardPositions;
-        public PositionFaceup(Vector3[] cardPositions) {
+        public Transform[] cardPositions;
+        public PositionFaceup(Transform[] cardPositions) {
             this.cardPositions = cardPositions;
         }
     }
 
     public struct PositionActivePlayer {
-        public Vector3 tickets;
-        public Vector3 trains;
-        public Dictionary<string, Vector3> colors;
-        public PositionActivePlayer(Vector3 tickets, Vector3 trains, Dictionary<string, Vector3> colors) {
+        public Transform tickets;
+        public Transform trains;
+        public Dictionary<string, Transform> colors;
+        public PositionActivePlayer(Transform tickets, Transform trains, Dictionary<string, Transform> colors) {
             this.tickets = tickets;
             this.trains = trains;
             this.colors = colors;
@@ -317,16 +325,21 @@ public class TTRBoard : MonoBehaviour {
     }
 
     public struct PositionOtherPlayers {
-        public Vector3[] otherPositions;
-        public PositionOtherPlayers(Vector3[] otherPositions) {
+        public Transform[] otherPositions;
+        public PositionOtherPlayers(Transform[] otherPositions) {
             this.otherPositions = otherPositions;
         }
     }
 
     public TTRPlayer Active {
         get {
-            return myTurn;
+            return players[ActiveIndex];
         }
+    }
+
+    public int ActiveIndex {
+        get;
+        private set;
     }
 
     public static Dictionary<string, int> ColorCountMap() {

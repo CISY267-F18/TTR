@@ -5,22 +5,25 @@ using UnityEngine;
 public class TTRCardTrain : MonoBehaviour {
     protected Color color;
 
+    private GameObject front;
+    private GameObject back;
+
+    private bool isRevealed;
+
+    protected static Dictionary<string, Texture2D> cardTextures = new Dictionary<string, Texture2D>();
+
     public static TTRCardTrain Spawn(string color) {
         TTRCardTrain card = Instantiate(TTRBoard.me.prefabCard).AddComponent<TTRCardTrain>();
-        card.SetColor(color);
+
+        card.fetchSides();
+        card.SetCardColor(color);
+        card.Revealed = false;
 
         return card;
     }
 
     public virtual bool IsUsable() {
         return true;
-    }
-
-    public void SetColor(string color) {
-        this.name = color.ToString();
-        this.color = TTRBoard.me.colorValue(color);
-        // todo cards aren't recolored, the different colors actually have different
-        // faces, so put the sprites in a hashmap of Color or something
     }
 
     public string Color {
@@ -34,12 +37,67 @@ public class TTRCardTrain : MonoBehaviour {
             return color;
         }
     }
+
+    protected void fetchSides() {
+        foreach (Transform t in transform.GetComponentsInChildren<Transform>()) {
+            if (t.name.Equals("Front")) {
+                front = t.gameObject;
+            }
+            else if (t.name.Equals("Back")) {
+                back = t.gameObject;
+            }
+        }
+    }
+
+    protected void SetCardColor(string color) {
+        this.name = color.ToString();
+        this.color = TTRBoard.me.colorValue(color);
+
+        if (!cardTextures.ContainsKey(color)) {
+            cardTextures.Add(color, Resources.Load<Texture2D>("Cards/Trains/" + color));
+        }
+        Material mtcard = front.GetComponent<MeshRenderer>().material;
+
+        mtcard.mainTexture = cardTextures[color];
+
+        SetCardBack();
+    }
+
+    protected void SetCardBack() {
+        string key = "Back";
+
+        if (!cardTextures.ContainsKey(key)) {
+            cardTextures.Add(key, Resources.Load<Texture2D>("Cards/Trains/" + key));
+        }
+
+        Material mtcard = back.GetComponent<MeshRenderer>().material;
+        mtcard.mainTexture = cardTextures[key];
+    }
+
+    public void MoveTo(Transform destination) {
+        transform.position = destination.position;
+        transform.rotation = destination.rotation;
+    }
+
+    public bool Revealed {
+        get {
+            return isRevealed;
+        }
+        set {
+            isRevealed = value;
+            front.SetActive(isRevealed);
+            back.SetActive(!isRevealed);
+        }
+    }
 }
 
 public class TTRCardRainbowTrain : TTRCardTrain {
     public static new TTRCardRainbowTrain Spawn(string color) {
         TTRCardRainbowTrain card = Instantiate(TTRBoard.me.prefabCard).AddComponent<TTRCardRainbowTrain>();
-        card.SetColor(color);
+
+        card.fetchSides();
+        card.SetCardColor(color);
+        card.Revealed = false;
 
         return card;
     }
