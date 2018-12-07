@@ -5,7 +5,7 @@ public class TTRPlayer : MonoBehaviour {
     TTRHand<TTRCardTrain> hand;
     TTRHand<TTRCardTravel> travel;
 
-    private const byte MAX_FREE_TRAINS = 45;
+    private const int MAX_FREE_TRAINS = 45;
     public int freeTrains;
     
     private static List<TTRPlayer> allPlayers = new List<TTRPlayer>();
@@ -183,5 +183,13 @@ public class TTRPlayer : MonoBehaviour {
         }
 
         return each;
+    }
+
+    public string Color { get; set; }
+
+    public Color ColorValue {
+        get {
+            return TTRBoard.me.colorValue(Color);
+        }
     }
 }

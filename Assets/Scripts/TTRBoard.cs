@@ -241,13 +241,24 @@ public class TTRBoard : MonoBehaviour {
     }
 
     private void Setup(int playerCount) {
+        List<string> playerColorNames = new List<string>();
+        playerColorNames.Add("Black");
+        playerColorNames.Add("Blue");
+        playerColorNames.Add("Green");
+        playerColorNames.Add("Yellow");
+        playerColorNames.Add("Red");
+
         foreach (TTRPlayer player in players) {
             Destroy(player);
         }
         players.Clear();
 
         for (var i = 0; i < playerCount; i++) {
-            players.Add(new GameObject(debugNames[i]).AddComponent<TTRPlayer>());
+            TTRPlayer nova = new GameObject(debugNames[i]).AddComponent<TTRPlayer>();
+            int index = Random.Range(0, playerColorNames.Count - 1);
+            nova.Color = playerColorNames[index];
+            playerColorNames.RemoveAt(index);
+            players.Add(nova);
         }
 
         foreach (TTRPlayer player in players) {

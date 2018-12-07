@@ -74,6 +74,9 @@ public class TTRConnection : MonoBehaviour {
             nova.name = builder.name + "'s Train";
 
             nova.transform.position = clickable.transform.position;
+
+            Material novaMat = nova.GetComponentInChildren<MeshRenderer>().material;
+            novaMat.color = builder.ColorValue;
         }
     }
 
