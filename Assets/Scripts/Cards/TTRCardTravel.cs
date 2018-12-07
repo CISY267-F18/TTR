@@ -10,6 +10,7 @@ public class TTRCardTravel : MonoBehaviour {
     private GameObject back;
 
     private bool isRevealed;
+    private TTRPlayer owner;
 
     protected static Dictionary<string, Texture2D> cardTextures = new Dictionary<string, Texture2D>();
 
@@ -25,6 +26,10 @@ public class TTRCardTravel : MonoBehaviour {
         ct.Revealed = false;
 
         return ct;
+    }
+
+    private void OnMouseUpAsButton() {
+        
     }
 
     protected void fetchSides() {
@@ -62,9 +67,24 @@ public class TTRCardTravel : MonoBehaviour {
         mtcard.mainTexture = cardTextures[key];
     }
 
+    public void Claim(TTRPlayer claimant) {
+        if (owner != null) {
+            throw new System.Exception("tried to claim a card that's already claimed");
+        }
+        owner = claimant;
+        if (claimant == TTRBoard.me.Active) {
+
+        } // i don't know if it's possible to do this otherwise
+    }
+
     public void MoveTo(Transform destination) {
         transform.position = destination.position;
         transform.rotation = destination.rotation;
+    }
+
+    public void Discard() {
+        owner = null;
+        TTRBoard.me.DeckTravelCards.AddCardToBottom(this);
     }
 
     public bool Revealed {

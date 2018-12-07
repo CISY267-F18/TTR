@@ -9,6 +9,7 @@ public class TTRCardTrain : MonoBehaviour {
     private GameObject back;
 
     private bool isRevealed;
+    private TTRPlayer owner;
 
     protected static Dictionary<string, Texture2D> cardTextures = new Dictionary<string, Texture2D>();
 
@@ -18,8 +19,21 @@ public class TTRCardTrain : MonoBehaviour {
         card.fetchSides();
         card.SetCardColor(color);
         card.Revealed = false;
+        card.owner = null;
 
         return card;
+    }
+
+    private void OnMouseUpAsButton() {
+        if (owner == null) {
+            TTRPlayer active = TTRBoard.me.Active;
+            if (active.FirstDraw) {
+                active.GrantTrainCard(this);
+                active.PositionMyCards();
+            }
+        } else {
+            Debug.Log("owner: " + owner.name);
+        }
     }
 
     public virtual bool IsUsable() {
@@ -72,6 +86,21 @@ public class TTRCardTrain : MonoBehaviour {
 
         Material mtcard = back.GetComponent<MeshRenderer>().material;
         mtcard.mainTexture = cardTextures[key];
+    }
+
+    public void Claim(TTRPlayer claimant) {
+        if (owner != null) {
+            throw new System.Exception("tried to claim a card that's already claimed");
+        }
+        owner = claimant;
+        if (claimant == TTRBoard.me.Active) {
+
+        } // i don't know if it's possible to do this otherwise
+    }
+
+    public void Discard() {
+        owner = null;
+        TTRBoard.me.DeckTrainCardDiscard.AddCard(this);
     }
 
     public void MoveTo(Transform destination) {

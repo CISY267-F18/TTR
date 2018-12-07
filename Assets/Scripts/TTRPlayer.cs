@@ -9,7 +9,7 @@ public class TTRPlayer : MonoBehaviour {
     public int freeTrains;
     
     private static List<TTRPlayer> allPlayers = new List<TTRPlayer>();
-
+    
     void Awake() {
         allPlayers.Add(this);
 
@@ -21,10 +21,12 @@ public class TTRPlayer : MonoBehaviour {
 
     public void GrantTrainCard(TTRCardTrain card) {
         hand.AddCard(card);
+        card.Claim(this);
     }
 
     public void GrantTravelCard(TTRCardTravel card) {
         travel.AddCard(card);
+        card.Claim(this);
     }
 
     public void Print() {
@@ -33,7 +35,12 @@ public class TTRPlayer : MonoBehaviour {
             "\tTravel cards: " + travel.Print());
     }
 
-    public void ActivateMyCards(bool animate = true) {
+    public void ActivateMe(bool animate = true) {
+        FirstDraw = true;
+        PositionMyCards(animate);
+    }
+
+    public void PositionMyCards(bool animate = true) {
         // when activated, all cards emerge from the front of the queue at the top of the board.
         // you don't physically see them move around between turns (maybe a polish goal, though).
         Transform[] positions = TTRBoard.me.pother.otherPositions;
@@ -46,7 +53,8 @@ public class TTRPlayer : MonoBehaviour {
         // if (animate) {
         if (false) {
 
-        } else {
+        }
+        else {
             TTRBoard board = TTRBoard.me;
             foreach (TTRCardTravel tc in travel.Contents) {
                 tc.MoveTo(board.pactive.tickets);
@@ -84,7 +92,7 @@ public class TTRPlayer : MonoBehaviour {
         for (var i = 0; i < allPlayers.Count; i++) {
             TTRPlayer player = allPlayers[i];
             if (player == active) {
-                player.ActivateMyCards(animate);
+                player.ActivateMe(animate);
             } else {
                 player.RemoveMyCards(animate);
             }
@@ -194,6 +202,20 @@ public class TTRPlayer : MonoBehaviour {
     public Color ColorValue {
         get {
             return TTRBoard.me.colorValue(Color);
+        }
+    }
+
+    public bool FirstDraw {
+        get;
+        private set;
+    }
+
+    public bool FirstDrawExecute {
+        get {
+            return false;
+        }
+        set {
+            FirstDraw = false;
         }
     }
 }

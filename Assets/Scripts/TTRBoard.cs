@@ -282,6 +282,7 @@ public class TTRBoard : MonoBehaviour {
             }
         }
 
+        // these will need to be separated later anyway
         foreach (TTRPlayer player in players) {
             for (var i=0; i<playerStartingTravelCardsMax; i++) {
                 player.GrantTravelCard(deckTravelCards.Draw());
@@ -380,5 +381,32 @@ public class TTRBoard : MonoBehaviour {
         }
 
         return -1;
+    }
+
+    public TTRDeckTrains DeckTrainCards {
+        get {
+            return deckTrainCards;
+        }
+        set {
+
+        }
+    }
+
+    public TTRDeckTravelCards DeckTravelCards {
+        get {
+            return deckTravelCards;
+        }
+        set {
+
+        }
+    }
+
+    public TTRDeckTrains DeckTrainCardDiscard {
+        get {
+            return deckCardTrainDiscard;
+        }
+        set {
+
+        }
     }
 }
