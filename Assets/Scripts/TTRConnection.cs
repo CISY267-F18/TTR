@@ -64,6 +64,19 @@ public class TTRConnection : MonoBehaviour {
         line.material.color = Color.Lerp(colorValue, Color.black, 0.15f);
     }
 
+    public void Build(TTRPlayer builder) {
+        Owner = builder;
+
+        foreach (GameObject clickable in connectionNodes) {
+            GameObject nova = Instantiate(TTRBoard.me.prefabBuiltConnection);
+            nova.transform.SetParent(clickable.transform.parent.transform);
+
+            nova.name = builder.name + "'s Train";
+
+            nova.transform.position = clickable.transform.position;
+        }
+    }
+
     public int Score() {
         return TTRBoard.pointValues[Distance];
     }

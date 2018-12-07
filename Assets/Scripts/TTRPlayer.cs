@@ -6,7 +6,7 @@ public class TTRPlayer : MonoBehaviour {
     TTRHand<TTRCardTravel> travel;
 
     private const byte MAX_FREE_TRAINS = 45;
-    public byte freeTrains;
+    public int freeTrains;
     
     private static List<TTRPlayer> allPlayers = new List<TTRPlayer>();
 
@@ -87,11 +87,85 @@ public class TTRPlayer : MonoBehaviour {
         }
     }
 
-    public bool CanBuild(TTRConnection connection) {
-        if (connection.Owner != null) {
-            return false;
+    public bool AttemptToBuild(TTRConnection connection) {
+        string validColorName = CanBuild(connection);
+        if (validColorName!=null) {
+            connection.Build(this);
+            RemoveCardsOfColor(validColorName, connection.Distance);
+            freeTrains = freeTrains - connection.Distance;
+            TTRBoard.me.Next();
+            return true;
         }
 
+        return false;
+    }
+
+    // todo document the way this returns the color of the card that can build on
+    // the connection, or null if one does not exist
+    public string CanBuild(TTRConnection connection) {
+        // already owned
+        if (connection.Owner != null) {
+            TTRUIStatusText.Create("Already owned by " + connection.Owner.name + "!");
+            return null;
+        }
+
+        // not enough trains
+        if (connection.Distance > freeTrains) {
+            TTRUIStatusText.Create("Not enough trains!");
+            return null;
+        }
+
+        // do you have the right cards?
+        Dictionary<string, int> each = CardCount();
+
+        // gray connections can be built upon by any color (or rainbow)
+        if (connection.ColorName.ToLower().Equals("free")) {
+            foreach (string cname in each.Keys) {
+                if (each[cname] >= connection.Distance) {
+                    // currently, returns a random color if there are multiple colors
+                    // that will work; in the future the player should be allowed to
+                    // choose
+                    return cname;
+                }
+            }
+            // colored connections can only be built upon by their color
+        } else {
+            if (each[connection.ColorName] >= connection.Distance) {
+                return connection.ColorName;
+            }
+        }
+
+        TTRUIStatusText.Create("Not enough train cards!");
+        return null;
+    }
+
+    public void RemoveCardsOfColor(string color, int n) {
+        List<TTRCardTrain> toRemove = new List<TTRCardTrain>();
+        // seek out cards of exactly that color
+        for (int i = 0; i < hand.Contents.Count; i++) {
+            if (toRemove.Count >= n) {
+                break;
+            }
+            if (hand.Contents[i].Color.Equals(color)) {
+                toRemove.Add(hand.Contents[i]);
+            }
+        }
+        // seek out rainbow cards, if you need them
+        for (int i = 0; i < hand.Contents.Count; i++) {
+            if (toRemove.Count >= n) {
+                break;
+            }
+            if (hand.Contents[i].Color.ToLower().Equals("rainbow")) {
+                toRemove.Add(hand.Contents[i]);
+            }
+        }
+        // do the actual removal
+        foreach (TTRCardTrain c in toRemove) {
+            hand.RemoveCard(c);
+        }
+    }
+
+    private Dictionary<string, int> CardCount() {
         Dictionary<string, int> each = TTRBoard.ColorCountMap();
         List<string> eachKeys = new List<string>(each.Keys);
 
@@ -101,24 +175,13 @@ public class TTRPlayer : MonoBehaviour {
                 foreach (string cname in eachKeys) {
                     each[cname]++;
                 }
-            // not-rainbow cards only count once
-            } else {
+                // not-rainbow cards only count once
+            }
+            else {
                 each[c.Color]++;
             }
         }
 
-        // gray connections can be built upon by any color (or rainbow)
-        if (connection.ColorName.ToLower().Equals("free")) {
-            foreach (string cname in each.Keys) {
-                if (each[cname] >= connection.Distance) {
-                    return true;
-                }
-            }
-        // colored connections can only be built upon by their color
-        } else {
-            return each[connection.ColorName] >= connection.Distance;
-        }
-
-        return false;
+        return each;
     }
 }

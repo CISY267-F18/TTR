@@ -11,6 +11,7 @@ public class TTRBoard : MonoBehaviour {
     // edges are shaded a bit and it looks less flat
     public GameObject prefabConnectionMarker;
     public GameObject prefabCard;
+    public GameObject prefabBuiltConnection;
 
     public static Dictionary<int, int> pointValues;
     public static Dictionary<string, Color> colorValues;
@@ -272,6 +273,18 @@ public class TTRBoard : MonoBehaviour {
         myTurn = player;
 
         TTRPlayer.PositionAllCards(player);
+    }
+
+    public void Next() {
+        if (myTurn == null) {
+            throw new System.Exception("congratulations you broke the game loop");
+        }
+
+        for (int i=0; i<players.Count; i++) {
+            if (players[i] == myTurn) {
+                BeginTurn(players[++i % players.Count]);
+            }
+        }
     }
 
     public struct PositionFaceup {
