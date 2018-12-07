@@ -99,7 +99,9 @@ public class TTRBoard : MonoBehaviour {
 
         ccdata = TTRStatic.ReadCSV(gdColors);
         foreach (string[] line in ccdata) {
-            colorValues.Add(line[0].Trim(), new Color(float.Parse(line[1]), float.Parse(line[2]), float.Parse(line[3])));
+            Color nc = new Color(float.Parse(line[1]), float.Parse(line[2]), float.Parse(line[3]));
+            colorValues.Add(line[0].Trim(), nc);
+
         }
 
         List<string> settings = TTRStatic.ReadText(gdSettings);
@@ -114,7 +116,7 @@ public class TTRBoard : MonoBehaviour {
 
         ccdata = TTRStatic.ReadCSV(gdConnections);
         foreach (string[] line in ccdata) {
-            Connect(nodes[line[0]], nodes[line[1]], int.Parse(line[2]), colorValues[line[3].Trim()]);
+            Connect(nodes[line[0]], nodes[line[1]], int.Parse(line[2]), line[3].Trim());
         }
 
         /*
@@ -216,7 +218,7 @@ public class TTRBoard : MonoBehaviour {
         return Spawn(x, y, name, x, y);
     }
 
-    private TTRConnection Connect(TTRNode source, TTRNode destination, int distance, Color color) {
+    private TTRConnection Connect(TTRNode source, TTRNode destination, int distance, string color) {
         TTRConnection connection = source.AddOutboundNode(destination, color, distance);
 
         connection.name = "Connection - " + source.name + ":" + destination.name + "[" + color + ":" + distance + "]";
@@ -295,5 +297,21 @@ public class TTRBoard : MonoBehaviour {
         public PositionOtherPlayers(Vector3[] otherPositions) {
             this.otherPositions = otherPositions;
         }
+    }
+
+    public TTRPlayer Active {
+        get {
+            return myTurn;
+        }
+    }
+
+    public static Dictionary<string, int> ColorCountMap() {
+        Dictionary<string, int> each = new Dictionary<string, int>();
+
+        foreach (string cname in colorValues.Keys) {
+            each.Add(cname, 0);
+        }
+
+        return each;
     }
 }

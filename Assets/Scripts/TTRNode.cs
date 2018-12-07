@@ -9,7 +9,7 @@ public class TTRNode : MonoBehaviour {
         outbound = new List<TTRConnection>();
     }
 
-    public TTRConnection AddOutboundNode(TTRNode destination, Color color, int distance) {
+    public TTRConnection AddOutboundNode(TTRNode destination, string color, int distance) {
         // creates a two-way link between this and destination, so you only
         // have to call it once for each pair
 

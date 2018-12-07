@@ -28,6 +28,12 @@ public class TTRCardTrain : MonoBehaviour {
             return name;
         }
     }
+
+    public Color ColorValue {
+        get {
+            return color;
+        }
+    }
 }
 
 public class TTRCardRainbowTrain : TTRCardTrain {

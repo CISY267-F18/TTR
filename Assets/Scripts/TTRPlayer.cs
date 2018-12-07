@@ -86,4 +86,39 @@ public class TTRPlayer : MonoBehaviour {
             }
         }
     }
+
+    public bool CanBuild(TTRConnection connection) {
+        if (connection.Owner != null) {
+            return false;
+        }
+
+        Dictionary<string, int> each = TTRBoard.ColorCountMap();
+        List<string> eachKeys = new List<string>(each.Keys);
+
+        foreach (TTRCardTrain c in hand.Contents) {
+            // rainbow cards count for each color
+            if (c.Color.ToLower().Equals("rainbow")) {
+                foreach (string cname in eachKeys) {
+                    each[cname]++;
+                }
+            // not-rainbow cards only count once
+            } else {
+                each[c.Color]++;
+            }
+        }
+
+        // gray connections can be built upon by any color (or rainbow)
+        if (connection.ColorName.ToLower().Equals("free")) {
+            foreach (string cname in each.Keys) {
+                if (each[cname] >= connection.Distance) {
+                    return true;
+                }
+            }
+        // colored connections can only be built upon by their color
+        } else {
+            return each[connection.ColorName] >= connection.Distance;
+        }
+
+        return false;
+    }
 }

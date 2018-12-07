@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Cards\TTRDeckTravelCards.cs" />
     <Compile Include="Assets\Scripts\TTRBoard.cs" />
     <Compile Include="Assets\Scripts\TTRConnection.cs" />
+    <Compile Include="Assets\Scripts\TTRConnectionClickable.cs" />
     <Compile Include="Assets\Scripts\TTRNode.cs" />
     <Compile Include="Assets\Scripts\TTRPlayer.cs" />
     <Compile Include="Assets\Scripts\TTRStatic.cs" />

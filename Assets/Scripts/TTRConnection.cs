@@ -7,21 +7,26 @@ public class TTRConnection : MonoBehaviour {
     private TTRNode source;
     private TTRNode destination;
     private LineRenderer line;
-    private int distance;
-    private Color color;
+
+    private List<GameObject> connectionNodes;
 
     private void Awake() {
         source = null;
         destination = null;
         line = null;
-        distance = 1;
-        color = Color.gray;
+        Color = Color.gray;
+        ColorName = "Free";
+
+        connectionNodes = new List<GameObject>();
+
+        Owner = null;
     }
 
-    public void Set(TTRNode source, TTRNode destination, Color color, int distance) {
+    public void Set(TTRNode source, TTRNode destination, string color, int distance) {
+        Color colorValue = TTRBoard.me.colorValue(color);
+
         this.source = source;
         this.destination = destination;
-        this.distance = distance;
 
         float angle = TTRStatic.AngleBetweenD(source, destination);
         
@@ -39,7 +44,9 @@ public class TTRConnection : MonoBehaviour {
             // need to make sure the renderer is instantiated, and the easiest way
             // to do that is to assign it to something
             novaRenderer.material = matConnection;
-            novaRenderer.material.color = color;
+            novaRenderer.material.color = colorValue;
+
+            connectionNodes.Add(nova);
         }
         // we will probably want to do something fancier so that it's more obvious
         // that routes have different costs eventually, but this will do for now
@@ -54,10 +61,22 @@ public class TTRConnection : MonoBehaviour {
         line.startWidth = 0.15f;
         line.endWidth = 0.15f;
         line.material = matConnection;
-        line.material.color = Color.Lerp(color, Color.black, 0.15f);
+        line.material.color = Color.Lerp(colorValue, Color.black, 0.15f);
     }
 
     public int Score() {
-        return TTRBoard.pointValues[distance];
+        return TTRBoard.pointValues[Distance];
+    }
+
+    public TTRPlayer Owner { get; private set; }
+
+    public Color Color { get; private set; }
+
+    public string ColorName { get; private set; }
+
+    public int Distance {
+        get {
+            return connectionNodes.Count;
+        }
     }
 }
