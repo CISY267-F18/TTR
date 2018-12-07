@@ -29,6 +29,8 @@ public class TTRBoard : MonoBehaviour {
     private TTRDeckTrains deckTrainCards;
     private TTRDeckTrains deckCardTrainDiscard;
 
+    private TTRCardTrain[] freeTrainCards;
+
     // game data
     private const string gdTravelRoutes = "Assets/Data/travelcards.csv";
     private const string gdConnections = "Assets/Data/connections.csv";
@@ -45,6 +47,8 @@ public class TTRBoard : MonoBehaviour {
     private const int playerStartingCards = 4;
     private const int playerStartingTravelCardsMax = 3;
     private const int playerStartingTravelCardsMin = 2;
+
+    private const int freeCardLimit = 5;
 
     // ui/screen stuff
     public PositionFaceup pfaceup;
@@ -201,6 +205,9 @@ public class TTRBoard : MonoBehaviour {
         // if you were playing the real game, even though there's no other reason to do that
         TTRPlayer.PositionAllCards(false);
 
+        freeTrainCards = new TTRCardTrain[freeCardLimit];
+        DealFreeCards();
+
         BeginTurn(0);
     }
 
@@ -350,5 +357,28 @@ public class TTRBoard : MonoBehaviour {
         }
 
         return each;
+    }
+
+    private void DealFreeCards() {
+        while (true) {
+            int index = MissingFreeCards();
+            if (index == -1) {
+                break;
+            }
+            TTRCardTrain top = deckTrainCards.Draw();
+            freeTrainCards[index] = top;
+            top.MoveTo(pfaceup.cardPositions[index]);
+            top.Revealed = true;
+        }
+    }
+
+    private int MissingFreeCards() {
+        for (int i=0; i<freeTrainCards.Length; i++) {
+            if (freeTrainCards[i] == null) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
