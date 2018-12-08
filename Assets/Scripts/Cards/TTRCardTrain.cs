@@ -23,13 +23,47 @@ public class TTRCardTrain : MonoBehaviour {
 
         return card;
     }
-
-    private void OnMouseUpAsButton() {
+    
+    void OnMouseUpAsButton() {
         if (owner == null) {
             TTRPlayer active = TTRBoard.me.Active;
-            if (active.FirstDraw) {
+            // if face up
+            if (Revealed) {
+                // if the first card you're drawing
+                if (active.FirstDraw) {
+                    active.GrantTrainCard(this);
+                    active.PositionMyCards();
+
+                    TTRBoard.me.RemoveFreeCard(this);
+
+                    if (this.Color.Equals("Rainbow")) {
+                        TTRBoard.me.Next();
+                    } else {
+                        active.FirstDrawExecute();
+                    }
+                }
+                // if the second card you're drawing
+                else {
+                    if (!this.Color.Equals("Rainbow")) {
+                        active.GrantTrainCard(this);
+                        active.PositionMyCards();
+
+                        TTRBoard.me.RemoveFreeCard(this);
+                        TTRBoard.me.Next();
+                    }
+                }
+            // if draw pile
+            } else {
                 active.GrantTrainCard(this);
                 active.PositionMyCards();
+
+                TTRBoard.me.RemoveFreeCard(this);
+
+                if (active.FirstDraw) {
+                    active.FirstDrawExecute();
+                } else {
+                    TTRBoard.me.Next();
+                }
             }
         } else {
             Debug.Log("owner: " + owner.name);

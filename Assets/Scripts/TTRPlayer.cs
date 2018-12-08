@@ -210,12 +210,7 @@ public class TTRPlayer : MonoBehaviour {
         private set;
     }
 
-    public bool FirstDrawExecute {
-        get {
-            return false;
-        }
-        set {
-            FirstDraw = false;
-        }
+    public void FirstDrawExecute() {
+        FirstDraw = false;
     }
 }

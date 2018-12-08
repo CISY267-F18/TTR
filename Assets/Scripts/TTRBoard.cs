@@ -360,7 +360,7 @@ public class TTRBoard : MonoBehaviour {
         return each;
     }
 
-    private void DealFreeCards() {
+    public void DealFreeCards() {
         while (true) {
             int index = MissingFreeCards();
             if (index == -1) {
@@ -370,6 +370,16 @@ public class TTRBoard : MonoBehaviour {
             freeTrainCards[index] = top;
             top.MoveTo(pfaceup.cardPositions[index]);
             top.Revealed = true;
+        }
+    }
+
+    public void RemoveFreeCard(TTRCardTrain card) {
+        for (int i=0; i<freeTrainCards.Length; i++) {
+            if (freeTrainCards[i] == card) {
+                freeTrainCards[i] = null;
+                DealFreeCards();
+                return;
+            }
         }
     }
 
