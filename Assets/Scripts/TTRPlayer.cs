@@ -115,13 +115,18 @@ public class TTRPlayer : MonoBehaviour {
     // todo document the way this returns the color of the card that can build on
     // the connection, or null if one does not exist
     public string CanBuild(TTRConnection connection) {
-        // already owned
+        // has already drawn a card?
+        if (!FirstDraw) {
+            return null;
+        }
+
+        // already owned?
         if (connection.Owner != null) {
             TTRUIStatusText.Create("Already owned by " + connection.Owner.name + "!");
             return null;
         }
 
-        // not enough trains
+        // not enough trains?
         if (connection.Distance > freeTrains) {
             TTRUIStatusText.Create("Not enough trains!");
             return null;

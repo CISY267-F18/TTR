@@ -67,8 +67,11 @@ public class TTRConnection : MonoBehaviour {
     public void Build(TTRPlayer builder) {
         Owner = builder;
 
+        Quaternion trainRotation=Quaternion.Euler(0f, 0f, TTRStatic.AngleBetweenD(source, destination));
+
         foreach (GameObject clickable in connectionNodes) {
             GameObject nova = Instantiate(TTRBoard.me.prefabBuiltConnection);
+            nova.transform.rotation = trainRotation;
             nova.transform.SetParent(clickable.transform.parent.transform);
 
             nova.name = builder.name + "'s Train";

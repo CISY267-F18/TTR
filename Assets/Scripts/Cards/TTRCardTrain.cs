@@ -25,6 +25,9 @@ public class TTRCardTrain : MonoBehaviour {
     }
     
     void OnMouseUpAsButton() {
+        if (TTRUIBlocking.IsBlocked()) {
+            return;
+        }
         if (owner == null) {
             TTRPlayer active = TTRBoard.me.Active;
             // if face up

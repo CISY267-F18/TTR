@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TTRDeckTrains : MonoBehaviour{
+public class TTRDeckTrains : MonoBehaviour {
     private List<TTRCardTrain> contents;
     private System.Random randomize;
 

@@ -29,7 +29,9 @@ public class TTRCardTravel : MonoBehaviour {
     }
 
     private void OnMouseUpAsButton() {
-        
+        if (TTRUIBlocking.IsBlocked()) {
+            return;
+        }
     }
 
     protected void fetchSides() {

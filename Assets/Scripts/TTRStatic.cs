@@ -58,4 +58,18 @@ public class TTRStatic {
 
         return len;
     }
+
+    // "borrowed" this from a java project which "borrowed" this from somewhere else on the internet
+    public static float AngleBetween(GameObject a, GameObject b) {
+        float r = b.transform.position.x - a.transform.position.x;
+        float u = b.transform.position.y - a.transform.position.y;
+        if (Mathf.Abs(r) < Mathf.Epsilon && Mathf.Abs(u) < Mathf.Epsilon) {
+            return 0.0f;
+        }
+        return (Mathf.Atan2(-u, r) + 2 * Mathf.PI) % (2 * Mathf.PI);
+    }
+
+    public static float AngleBetweenD(GameObject a, GameObject b) {
+        return Mathf.Rad2Deg * AngleBetween(a, b);
+    }
 }
