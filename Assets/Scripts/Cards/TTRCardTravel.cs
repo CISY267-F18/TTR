@@ -28,10 +28,15 @@ public class TTRCardTravel : MonoBehaviour {
         return ct;
     }
 
-    private void OnMouseUpAsButton() {
+    public void OnMouseUpAsButton() {
+        if (!TTRBoard.me.Active.FirstDraw) {
+            return;
+        }
         if (TTRUIBlocking.IsBlocked()) {
             return;
         }
+
+        TTRUIBlocking.Block("Choose a travel card.");
     }
 
     protected void fetchSides() {

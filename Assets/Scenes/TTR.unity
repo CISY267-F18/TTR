@@ -220,7 +220,6 @@ GameObject:
   - component: {fileID: 256687839}
   - component: {fileID: 256687842}
   - component: {fileID: 256687841}
-  - component: {fileID: 256687840}
   m_Layer: 0
   m_Name: Player Card Orange
   m_TagString: screen/active/orange
@@ -241,18 +240,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &256687840
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 256687838}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &256687841
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -378,7 +365,6 @@ GameObject:
   - component: {fileID: 391029444}
   - component: {fileID: 391029447}
   - component: {fileID: 391029446}
-  - component: {fileID: 391029445}
   m_Layer: 0
   m_Name: Player Card Black
   m_TagString: screen/active/black
@@ -399,18 +385,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &391029445
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 391029443}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &391029446
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -463,7 +437,6 @@ GameObject:
   - component: {fileID: 436324412}
   - component: {fileID: 436324415}
   - component: {fileID: 436324414}
-  - component: {fileID: 436324413}
   m_Layer: 0
   m_Name: Player Card Tickets
   m_TagString: screen/active/tickets
@@ -484,18 +457,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!65 &436324413
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 436324411}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &436324414
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -620,7 +581,6 @@ GameObject:
   - component: {fileID: 479227938}
   - component: {fileID: 479227941}
   - component: {fileID: 479227940}
-  - component: {fileID: 479227939}
   m_Layer: 0
   m_Name: Player Card Red
   m_TagString: screen/active/red
@@ -641,18 +601,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &479227939
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 479227937}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &479227940
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -705,7 +653,6 @@ GameObject:
   - component: {fileID: 490165690}
   - component: {fileID: 490165693}
   - component: {fileID: 490165692}
-  - component: {fileID: 490165691}
   m_Layer: 0
   m_Name: Player Card Green
   m_TagString: screen/active/green
@@ -726,18 +673,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &490165691
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 490165689}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &490165692
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -955,7 +890,6 @@ GameObject:
   - component: {fileID: 686929940}
   - component: {fileID: 686929943}
   - component: {fileID: 686929942}
-  - component: {fileID: 686929941}
   m_Layer: 0
   m_Name: Player Card Yellow
   m_TagString: screen/active/yellow
@@ -976,18 +910,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &686929941
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 686929939}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &686929942
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1141,7 +1063,6 @@ GameObject:
   - component: {fileID: 771334365}
   - component: {fileID: 771334368}
   - component: {fileID: 771334367}
-  - component: {fileID: 771334366}
   m_Layer: 0
   m_Name: train car deck
   m_TagString: screen/traincarddeck
@@ -1162,18 +1083,6 @@ Transform:
   m_Father: {fileID: 1107664798}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!65 &771334366
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 771334364}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &771334367
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1298,7 +1207,6 @@ GameObject:
   - component: {fileID: 931124309}
   - component: {fileID: 931124312}
   - component: {fileID: 931124311}
-  - component: {fileID: 931124310}
   m_Layer: 0
   m_Name: Player Card Blue
   m_TagString: screen/active/blue
@@ -1319,18 +1227,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &931124310
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 931124308}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &931124311
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1628,7 +1524,6 @@ GameObject:
   - component: {fileID: 1066782459}
   - component: {fileID: 1066782462}
   - component: {fileID: 1066782461}
-  - component: {fileID: 1066782460}
   m_Layer: 0
   m_Name: Player Card Pink
   m_TagString: screen/active/pink
@@ -1649,18 +1544,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1066782460
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1066782458}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1066782461
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2316,7 +2199,6 @@ GameObject:
   - component: {fileID: 1430593731}
   - component: {fileID: 1430593734}
   - component: {fileID: 1430593733}
-  - component: {fileID: 1430593732}
   m_Layer: 0
   m_Name: Player Card White
   m_TagString: screen/active/white
@@ -2337,18 +2219,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1430593732
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1430593730}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1430593733
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2612,7 +2482,6 @@ GameObject:
   - component: {fileID: 1556600988}
   - component: {fileID: 1556600991}
   - component: {fileID: 1556600990}
-  - component: {fileID: 1556600989}
   m_Layer: 0
   m_Name: ticket deck
   m_TagString: screen/ticketdeck
@@ -2633,18 +2502,6 @@ Transform:
   m_Father: {fileID: 1107664798}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!65 &1556600989
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1556600987}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1556600990
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3198,7 +3055,6 @@ GameObject:
   - component: {fileID: 1950188785}
   - component: {fileID: 1950188788}
   - component: {fileID: 1950188787}
-  - component: {fileID: 1950188786}
   m_Layer: 0
   m_Name: Player Card Rainbow
   m_TagString: screen/active/rainbow
@@ -3219,18 +3075,6 @@ Transform:
   m_Father: {fileID: 2079499820}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1950188786
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1950188784}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1950188787
 MeshRenderer:
   m_ObjectHideFlags: 0
