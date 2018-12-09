@@ -57,4 +57,8 @@ public class TTRDeckTravelCards : MonoBehaviour {
             card.enabled = false;
         }
     }
+
+    public int Size() {
+        return contents.Count;
+    }
 }

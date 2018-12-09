@@ -67,6 +67,7 @@
      <None Include="Assets\Graphics\notes.txt" />
      <None Include="Assets\Data\settings.txt" />
      <None Include="Assets\Data\notes.txt" />
+     <None Include="Assets\Graphics\ShdText.shader" />
      <None Include="Assets\Data\nto1.js.txt" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>C:/Users/mpeng/Files and stuff/Class/CISY267/unity stuff/TTR/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

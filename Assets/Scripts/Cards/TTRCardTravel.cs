@@ -35,8 +35,16 @@ public class TTRCardTravel : MonoBehaviour {
         if (TTRUIBlocking.IsBlocked()) {
             return;
         }
+        if (owner != null) {
+            return;
+        }
 
-        TTRUIBlocking.Block("Choose a travel card.");
+        TTRCardTravel[] drawn=new TTRCardTravel[Mathf.Min(TTRBoard.me.DeckTravelCards.Size(), 3)];
+        for (int i=0; i<drawn.Length; i++){
+            drawn[i]=TTRBoard.me.DeckTravelCards.Draw();
+        }
+
+        TTRUIBlocking.Block("Choose a travel card.", drawn);
     }
 
     protected void fetchSides() {
@@ -89,6 +97,11 @@ public class TTRCardTravel : MonoBehaviour {
         transform.rotation = destination.rotation;
     }
 
+    public void MoveTo(Vector3 position, Quaternion rotation) {
+        transform.position = position;
+        transform.rotation = rotation;
+    }
+
     public void Discard() {
         owner = null;
         TTRBoard.me.DeckTravelCards.AddCardToBottom(this);
@@ -102,6 +115,15 @@ public class TTRCardTravel : MonoBehaviour {
             isRevealed = value;
             front.SetActive(isRevealed);
             back.SetActive(!isRevealed);
+        }
+    }
+
+    public Texture Texture {
+        get {
+            return front.GetComponent<MeshRenderer>().material.mainTexture;
+        }
+        set {
+
         }
     }
 }
