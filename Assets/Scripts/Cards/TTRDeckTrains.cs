@@ -59,4 +59,19 @@ public class TTRDeckTrains : MonoBehaviour {
 
         Shuffle();
     }
+
+    public int RainbowCount() {
+        int n = 0;
+        foreach (TTRCardTrain card in contents) {
+            if (card.Color.ToLower().Equals("rainbow")) {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
+    public int NonRainbowCount() {
+        return contents.Count - RainbowCount();
+    }
 }

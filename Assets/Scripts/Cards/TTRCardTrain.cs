@@ -39,11 +39,13 @@ public class TTRCardTrain : MonoBehaviour {
 
                     TTRBoard.me.RemoveFreeCard(this);
 
-                    if (this.Color.Equals("Rainbow")) {
-                        TTRBoard.me.Next();
-                    } else {
-                        active.FirstDrawExecute();
+                    if (!this.Color.Equals("Rainbow")) {
+                        if (TTRBoard.me.ThereAreAnyFreeNonRainbowCards()) {
+                            active.FirstDrawExecute();
+                        }
                     }
+
+                    TTRBoard.me.Next();
                 }
                 // if the second card you're drawing
                 else {
@@ -62,8 +64,13 @@ public class TTRCardTrain : MonoBehaviour {
 
                 TTRBoard.me.RemoveFreeCard(this);
 
+                // no players in their right mind will ever let this happen though
                 if (active.FirstDraw) {
-                    active.FirstDrawExecute();
+                    if (TTRBoard.me.ThereAreAnyFreeNonRainbowCards()) {
+                        active.FirstDrawExecute();
+                    } else {
+                        TTRBoard.me.Next();
+                    }
                 } else {
                     TTRBoard.me.Next();
                 }

@@ -388,7 +388,7 @@ public class TTRBoard : MonoBehaviour {
         // if there are no more cards in either pile and there are three free rainbows,
         // continually discarding, re-shuffling and re-dealing will give you a lovely
         // StackOverflowException because it will never end
-        if (RainbowCardCount() > 2 && deckTrainCards.Has() || DeckTrainCardDiscard.Has()) {
+        if (RainbowCardCount() > 2 && (deckTrainCards.NonRainbowCount() + DeckTrainCardDiscard.NonRainbowCount()) > 2) {
             foreach (TTRCardTrain card in freeTrainCards) {
                 card.Discard();
                 RemoveFreeCard(card, false);
@@ -428,6 +428,11 @@ public class TTRBoard : MonoBehaviour {
         }
 
         return n;
+    }
+
+    public bool ThereAreAnyFreeNonRainbowCards() {
+        Debug.Log("there are these many non-rainbow cards: " + (freeTrainCards.Length - RainbowCardCount()));
+        return (freeTrainCards.Length - RainbowCardCount()) > 0;
     }
 
     public TTRDeckTrains DeckTrainCards {

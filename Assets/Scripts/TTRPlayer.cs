@@ -242,6 +242,7 @@ public class TTRPlayer : MonoBehaviour {
     }
 
     public void FirstDrawExecute() {
+        TTRUIStatusText.Create(name + " may draw another card");
         FirstDraw = false;
     }
 
