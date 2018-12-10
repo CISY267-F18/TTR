@@ -31,7 +31,7 @@ public class TTRUIBlocking : MonoBehaviour {
 
         GameObject.FindGameObjectWithTag("ui/semidark/text").GetComponent<Text>().text = message;
 
-        int half=(int)(tc.Length/2);
+        float half = tc.Length / 2f;
         float separation=12f;
 
         for (int i = 0; i < tc.Length; i++) {
@@ -39,7 +39,7 @@ public class TTRUIBlocking : MonoBehaviour {
 
             card.Revealed = true;
             card.Pending = true;
-            card.MoveTo(new Vector3(CENTER.position.x - separation * (i - half), CENTER.position.y, CENTER.position.z), CENTER.rotation, CENTER.localScale);
+            card.MoveTo(new Vector3(CENTER.position.x - separation * (i - half + 0.5f), CENTER.position.y, CENTER.position.z), CENTER.rotation, CENTER.localScale);
         }
 
         focused = tc;

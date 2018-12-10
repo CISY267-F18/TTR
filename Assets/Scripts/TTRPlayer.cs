@@ -56,14 +56,32 @@ public class TTRPlayer : MonoBehaviour {
         }
         else {
             TTRBoard board = TTRBoard.me;
-            for (int i = 0; i < travel.Contents.Count; i++){
+            for (int i = 0; i < travel.Contents.Count; i++) {
                 TTRCardTravel tc=travel.Contents[i];
                 Vector3 ticketPosition = board.pactive.tickets.position;
                 tc.MoveTo(new Vector3(ticketPosition.x, ticketPosition.y + i, ticketPosition.z + i), board.pactive.tickets.rotation, board.pactive.tickets.localScale);
                 tc.Revealed = true;
             }
-            foreach (TTRCardTrain tc in hand.Contents) {
-                tc.MoveTo(board.pactive.colors[tc.Color]);
+
+            foreach (string cname in board.pactive.colors.Keys){
+                board.pactive.colors[cname].GetComponentInChildren<TextMesh>().text = "";
+            }
+
+            Dictionary<string, int> cardColors = new Dictionary<string, int>();
+            for (int i = 0; i < hand.Contents.Count; i++) {
+                TTRCardTrain tc = hand.Contents[i];
+                Vector3 ticketPosition = board.pactive.colors[tc.Color].position;
+                float offset = 0f;
+                if (cardColors.ContainsKey(tc.Color)) {
+                    offset = 0.25f;
+                    cardColors[tc.Color]++;
+                    if (cardColors[tc.Color] > 2) {
+                        board.pactive.colors[tc.Color].GetComponentInChildren<TextMesh>().text = cardColors[tc.Color].ToString();
+                    }
+                } else {
+                    cardColors.Add(tc.Color, 1);
+                }
+                tc.MoveTo(new Vector3(ticketPosition.x, ticketPosition.y + offset, ticketPosition.z + offset), board.pactive.colors[tc.Color].rotation, board.pactive.colors[tc.Color].localScale);
                 tc.Revealed = true;
             }
             // todo something with the note that says how many available trains you have remaining
