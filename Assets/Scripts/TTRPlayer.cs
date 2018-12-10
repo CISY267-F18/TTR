@@ -143,6 +143,7 @@ public class TTRPlayer : MonoBehaviour {
     public string CanBuild(TTRConnection connection) {
         // has already drawn a card?
         if (!FirstDraw) {
+            TTRUIStatusText.Create("Already committed to drawing cards!");
             return null;
         }
 
@@ -171,7 +172,7 @@ public class TTRPlayer : MonoBehaviour {
                     return cname;
                 }
             }
-            // colored connections can only be built upon by their color
+        // colored connections can only be built upon by their color
         } else {
             if (each[connection.ColorName] >= connection.Distance) {
                 return connection.ColorName;

@@ -23,6 +23,7 @@ public class TTRConnection : MonoBehaviour {
     }
 
     public void Set(TTRNode source, TTRNode destination, string color, int distance) {
+        ColorName = color;
         Color colorValue = TTRBoard.me.colorValue(color);
 
         this.source = source;
