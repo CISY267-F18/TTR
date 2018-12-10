@@ -256,10 +256,6 @@ public class TTRBoard : MonoBehaviour {
         return n * boardWidth - boardWidth / 2;
     }
 
-    private void ReassembleDeck() {
-        deckTrainCards.Reassemble(deckCardTrainDiscard);
-    }
-
     private void Setup(int playerCount) {
         List<string> playerColorNames = new List<string>();
         playerColorNames.Add("Black");

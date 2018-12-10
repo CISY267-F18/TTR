@@ -52,6 +52,20 @@ public class TTRDeckTravelCards : MonoBehaviour {
         return card;
     }
 
+    public void Reassemble() {
+        Debug.Log("Reassembled travel card deck");
+        TTRDeckTravelCards other = TTRBoard.me.DeckTravelCardDiscard;
+        while (other.Has()) {
+            AddCard(other.Draw());
+        }
+
+        Shuffle();
+    }
+
+    public bool Has() {
+        return contents.Count > 0;
+    }
+
     public void Return(TTRCardTravel card) {
         contents.Add(card);
     }

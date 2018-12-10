@@ -51,7 +51,8 @@ public class TTRDeckTrains : MonoBehaviour {
         return contents.Count > 0;
     }
 
-    public void Reassemble(TTRDeckTrains other) {
+    public void Reassemble() {
+        TTRDeckTrains other = TTRBoard.me.DeckTrainCardDiscard;
         while (other.Has()) {
             AddCard(other.Draw());
         }

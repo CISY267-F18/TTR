@@ -18,7 +18,7 @@ public class TTRUIBlocking : MonoBehaviour {
     }
 
     public static void Block(string message, TTRCardTravel[] tc) {
-        if (tc == null) {
+        if (tc.Length == 0) {
             TTRUIStatusText.Create("No travel cards to set!");
             return;
         }

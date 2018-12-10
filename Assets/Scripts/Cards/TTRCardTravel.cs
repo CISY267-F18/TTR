@@ -52,6 +52,10 @@ public class TTRCardTravel : MonoBehaviour {
             return;
         }
 
+        if (!TTRBoard.me.DeckTravelCards.Has()) {
+            TTRBoard.me.DeckTravelCards.Reassemble();
+        }
+
         TTRCardTravel[] drawn = new TTRCardTravel[Mathf.Min(TTRBoard.me.DeckTravelCards.Size(), 3)];
         for (int i = 0; i < drawn.Length; i++) {
             drawn[i] = TTRBoard.me.DeckTravelCards.Draw();
