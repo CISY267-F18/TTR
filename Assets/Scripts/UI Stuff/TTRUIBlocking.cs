@@ -18,6 +18,8 @@ public class TTRUIBlocking : MonoBehaviour {
     }
 
     public static void Block(string message, TTRCardTravel[] tc) {
+        // Pretty sure this can never happen, since you can't do this if there are no cards to
+        // be clicked on, but just in case
         if (tc.Length == 0) {
             TTRUIStatusText.Create("No travel cards to set!");
             return;

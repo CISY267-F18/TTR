@@ -56,8 +56,10 @@ public class TTRPlayer : MonoBehaviour {
         }
         else {
             TTRBoard board = TTRBoard.me;
-            foreach (TTRCardTravel tc in travel.Contents) {
-                tc.MoveTo(board.pactive.tickets);
+            for (int i = 0; i < travel.Contents.Count; i++){
+                TTRCardTravel tc=travel.Contents[i];
+                Vector3 ticketPosition = board.pactive.tickets.position;
+                tc.MoveTo(new Vector3(ticketPosition.x, ticketPosition.y + i, ticketPosition.z + i), board.pactive.tickets.rotation, board.pactive.tickets.localScale);
                 tc.Revealed = true;
             }
             foreach (TTRCardTrain tc in hand.Contents) {
