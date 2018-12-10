@@ -10,7 +10,6 @@ public class TTRCardTravel : MonoBehaviour {
     private GameObject back;
 
     private bool isRevealed;
-    private TTRPlayer owner;
 
     protected static Dictionary<string, Texture2D> cardTextures = new Dictionary<string, Texture2D>();
 
@@ -25,23 +24,37 @@ public class TTRCardTravel : MonoBehaviour {
         ct.SetCardTexture();
         ct.Revealed = false;
 
+        ct.Pending = false;
+        ct.Owner = null;
+
         return ct;
     }
 
     public void OnMouseUpAsButton() {
+        // the checks have to bein this order because this is spaghetti
+
+        // if youve already committed to drawing from the train card deck, you should finish doing that
         if (!TTRBoard.me.Active.FirstDraw) {
             return;
+        }
+
+        // if the card is available for claim, claim it, discard the other(s) and continue
+        if (Pending) {
+            TTRBoard.me.Active.GrantTravelCard(this);
+            MoveTo(TTRBoard.me.pactive.tickets);
+            TTRUIBlocking.Unblock();
+            TTRBoard.me.Next();
         }
         if (TTRUIBlocking.IsBlocked()) {
             return;
         }
-        if (owner != null) {
+        if (Owner != null) {
             return;
         }
 
-        TTRCardTravel[] drawn=new TTRCardTravel[Mathf.Min(TTRBoard.me.DeckTravelCards.Size(), 3)];
-        for (int i=0; i<drawn.Length; i++){
-            drawn[i]=TTRBoard.me.DeckTravelCards.Draw();
+        TTRCardTravel[] drawn = new TTRCardTravel[Mathf.Min(TTRBoard.me.DeckTravelCards.Size(), 3)];
+        for (int i = 0; i < drawn.Length; i++) {
+            drawn[i] = TTRBoard.me.DeckTravelCards.Draw();
         }
 
         TTRUIBlocking.Block("Choose a travel card.", drawn);
@@ -83,28 +96,31 @@ public class TTRCardTravel : MonoBehaviour {
     }
 
     public void Claim(TTRPlayer claimant) {
-        if (owner != null) {
-            throw new System.Exception("tried to claim a card that's already claimed");
+        if (Owner != null) {
+            throw new System.Exception("tried to claim a card that's already claimed by "+Owner.name);
         }
-        owner = claimant;
+        Owner = claimant;
         if (claimant == TTRBoard.me.Active) {
 
         } // i don't know if it's possible to do this otherwise
     }
 
     public void MoveTo(Transform destination) {
-        transform.position = destination.position;
-        transform.rotation = destination.rotation;
+        MoveTo(destination.position, destination.rotation, destination.localScale);
     }
 
-    public void MoveTo(Vector3 position, Quaternion rotation) {
+    public void MoveTo(Vector3 position, Quaternion rotation, Vector3 scale) {
         transform.position = position;
         transform.rotation = rotation;
+        transform.localScale = scale;
     }
 
     public void Discard() {
-        owner = null;
-        TTRBoard.me.DeckTravelCards.AddCardToBottom(this);
+        Owner = null;
+        Revealed = false;
+        Pending = false;
+        TTRBoard.me.DeckTravelCardDiscard.AddCard(this);
+        MoveTo(TTRBoard.me.pdecks.traveldiscard);
     }
 
     public bool Revealed {
@@ -125,5 +141,15 @@ public class TTRCardTravel : MonoBehaviour {
         set {
 
         }
+    }
+
+    public bool Pending {
+        get;
+        set;
+    }
+
+    public TTRPlayer Owner {
+        get;
+        private set;
     }
 }

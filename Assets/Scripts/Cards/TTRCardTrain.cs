@@ -137,12 +137,19 @@ public class TTRCardTrain : MonoBehaviour {
 
     public void Discard() {
         owner = null;
+        Revealed = false;
         TTRBoard.me.DeckTrainCardDiscard.AddCard(this);
+        MoveTo(TTRBoard.me.pdecks.traindiscard);
     }
 
     public void MoveTo(Transform destination) {
-        transform.position = destination.position;
-        transform.rotation = destination.rotation;
+        MoveTo(destination.position, destination.rotation, destination.localScale);
+    }
+
+    public void MoveTo(Vector3 position, Quaternion rotation, Vector3 scale) {
+        transform.position = position;
+        transform.rotation = rotation;
+        transform.localScale = scale;
     }
 
     public bool Revealed {

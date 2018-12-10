@@ -26,6 +26,7 @@ public class TTRBoard : MonoBehaviour {
 
     private Dictionary<string, TTRNode> nodes;
     private TTRDeckTravelCards deckTravelCards;
+    private TTRDeckTravelCards deckTravelCardDiscard;
     private TTRDeckTrains deckTrainCards;
     private TTRDeckTrains deckCardTrainDiscard;
 
@@ -141,7 +142,9 @@ public class TTRBoard : MonoBehaviour {
         }
 
         pdecks = new PositionDecks(GameObject.FindGameObjectWithTag("screen/traincarddeck").transform,
-            GameObject.FindGameObjectWithTag("screen/ticketdeck").transform);
+            GameObject.FindGameObjectWithTag("screen/ticketdeck").transform,
+            GameObject.FindGameObjectWithTag("screen/traincardiscard").transform,
+            GameObject.FindGameObjectWithTag("screen/ticketdiscard").transform);
 
         pactive = new PositionActivePlayer(GameObject.FindGameObjectWithTag("screen/active/tickets").transform,
             GameObject.FindGameObjectWithTag("screen/active/trains").transform, cpd);
@@ -182,6 +185,8 @@ public class TTRBoard : MonoBehaviour {
         deckCardTrainDiscard.gameObject.SetActive(false);
         
         deckTravelCards = containerTravelCards.gameObject.AddComponent<TTRDeckTravelCards>();
+
+        deckTravelCardDiscard = new GameObject("Deck: Travel Card Discard").AddComponent<TTRDeckTravelCards>();
 
         ccdata = TTRStatic.ReadCSV(gdTravelRoutes);
         foreach (string[] line in ccdata) {
@@ -308,9 +313,13 @@ public class TTRBoard : MonoBehaviour {
     public struct PositionDecks {
         public Transform train;
         public Transform travel;
-        public PositionDecks(Transform train, Transform travel) {
+        public Transform traindiscard;
+        public Transform traveldiscard;
+        public PositionDecks(Transform train, Transform travel, Transform traindiscard, Transform traveldiscard) {
             this.train = train;
             this.travel = travel;
+            this.traindiscard = traindiscard;
+            this.traveldiscard = traveldiscard;
         }
     }
 
@@ -414,6 +423,15 @@ public class TTRBoard : MonoBehaviour {
     public TTRDeckTrains DeckTrainCardDiscard {
         get {
             return deckCardTrainDiscard;
+        }
+        set {
+
+        }
+    }
+
+    public TTRDeckTravelCards DeckTravelCardDiscard {
+        get {
+            return deckTravelCardDiscard;
         }
         set {
 

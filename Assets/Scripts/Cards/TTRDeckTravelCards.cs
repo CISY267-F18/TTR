@@ -52,6 +52,10 @@ public class TTRDeckTravelCards : MonoBehaviour {
         return card;
     }
 
+    public void Return(TTRCardTravel card) {
+        contents.Add(card);
+    }
+
     public void FinalizeDeck() {
         foreach (TTRCardTravel card in contents) {
             card.enabled = false;

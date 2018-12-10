@@ -2,16 +2,19 @@
 using UnityEngine.UI;
 
 public class TTRUIBlocking : MonoBehaviour {
-    private static GameObject blocking;
+    private static GameObject[] blocking;
 
-    private static Vector3 CENTER;
+    private static Transform CENTER;
+    private static TTRCardTravel[] focused;
 
     void Awake() {
-        CENTER = GameObject.FindGameObjectWithTag("center").transform.position;
+        CENTER = GameObject.FindGameObjectWithTag("center").transform;
 
         // this has to go at the end because you can't find deactivate game objects
-        blocking = GameObject.FindGameObjectWithTag("ui/semidark");
-        blocking.SetActive(false);
+        blocking = GameObject.FindGameObjectsWithTag("ui/semidark");
+        foreach (GameObject thing in blocking) {
+            thing.SetActive(false);
+        }
     }
 
     public static void Block(string message, TTRCardTravel[] tc) {
@@ -20,19 +23,24 @@ public class TTRUIBlocking : MonoBehaviour {
             return;
         }
 
-        blocking.SetActive(true);
+        foreach (GameObject thing in blocking) {
+            thing.SetActive(true);
+        }
 
-        GameObject.FindGameObjectWithTag("ui/semidark/text").GetComponent<Text>().text=message;
+        GameObject.FindGameObjectWithTag("ui/semidark/text").GetComponent<Text>().text = message;
 
         int half=(int)(tc.Length/2);
-        float separation=5f;
+        float separation=12f;
 
         for (int i = 0; i < tc.Length; i++) {
             TTRCardTravel card = tc[i];
 
             card.Revealed = true;
-            card.MoveTo(new Vector3(CENTER.x - separation * (i - half), CENTER.y, CENTER.z), Quaternion.Euler(0f, 0f, 0f));
+            card.Pending = true;
+            card.MoveTo(new Vector3(CENTER.position.x - separation * (i - half), CENTER.position.y, CENTER.position.z), CENTER.rotation, CENTER.localScale);
         }
+
+        focused = tc;
 
         // TextMeshes are drawn on top of everything else, even things that are in front of them,
         // because Unity apparentlyd doesn't know what the "3D" part of "3D Text" means.
@@ -47,16 +55,27 @@ public class TTRUIBlocking : MonoBehaviour {
     }
 
     public static void Unblock() {
-        blocking.SetActive(false);
+        foreach (GameObject thing in blocking) {
+            thing.SetActive(false);
+        }
 
         GameObject[] textlabels = GameObject.FindGameObjectsWithTag("cityname");
 
         foreach (GameObject label in textlabels) {
             label.SetActive(false);
         }
+
+        foreach (TTRCardTravel card in focused) {
+            if (card != null && card.Owner == null) {
+                card.Pending = false;
+                card.Discard();
+                card.MoveTo(TTRBoard.me.pdecks.travel);
+            }
+        }
     }
 
     public static bool IsBlocked() {
-        return blocking.activeInHierarchy;
+        // theyre all handled together so just grab the first one
+        return blocking[0].activeInHierarchy;
     }
 }
