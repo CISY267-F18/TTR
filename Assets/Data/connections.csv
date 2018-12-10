@@ -7,10 +7,10 @@ Seattle,Helena,6,Yellow
 Helena,Winnipeg,4,Blue
 Winnipeg,Duluth,4,Black
 Helena,Duluth,6,Orange
-Winnipeg,Sault St. Marie,6,Free
-Duluth,Sault St. Marie,3,Free
-Sault St. Marie,Toronto,2,Free
-Sault St. Marie,Montreal,5,Black
+Winnipeg,Sault Ste Marie,6,Free
+Duluth,Sault Ste Marie,3,Free
+Sault Ste Marie,Toronto,2,Free
+Sault Ste Marie,Montreal,5,Black
 Toronto,Montreal,3,Free
 Montreal,New York,3,Blue
 Montreal,Boston,2,Free
