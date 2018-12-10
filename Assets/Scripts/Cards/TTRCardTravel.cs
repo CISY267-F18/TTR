@@ -38,12 +38,26 @@ public class TTRCardTravel : MonoBehaviour {
             return;
         }
 
+        if (Owner == TTRBoard.me.Active) {
+            if (!Owner.EvaluatedTravelCards) {
+                Owner.EvaluatedTravelCards = true;
+                Owner.PositionMyCards(true);
+
+                // on discard, owner gets set to null, so if you need to do anything with the
+                // owner do it before you discard the card
+                Discard();
+                TTRUIBlocking.CancelBlock();
+                TTRBoard.me.Next();
+                return;
+            }
+        }
         // if the card is available for claim, claim it, discard the other(s) and continue
         if (Pending) {
             TTRBoard.me.Active.GrantTravelCard(this);
             MoveTo(TTRBoard.me.pactive.tickets);
             TTRUIBlocking.Unblock();
             TTRBoard.me.Next();
+            return;
         }
         if (TTRUIBlocking.IsBlocked()) {
             return;

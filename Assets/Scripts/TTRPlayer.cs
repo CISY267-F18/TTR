@@ -17,6 +17,8 @@ public class TTRPlayer : MonoBehaviour {
         travel = new TTRHand<TTRCardTravel>();
 
         freeTrains = MAX_FREE_TRAINS;
+
+        EvaluatedTravelCards = false;
     }
 
     public void GrantTrainCard(TTRCardTrain card) {
@@ -85,6 +87,10 @@ public class TTRPlayer : MonoBehaviour {
                 tc.Revealed = true;
             }
             // todo something with the note that says how many available trains you have remaining
+
+            if (!EvaluatedTravelCards) {
+                TTRUIBlocking.Block("You may discard one of your Travel Cards, if you like", travel.Contents.ToArray(), true);
+            }
         }
     }
 
@@ -237,5 +243,10 @@ public class TTRPlayer : MonoBehaviour {
 
     public void FirstDrawExecute() {
         FirstDraw = false;
+    }
+
+    public bool EvaluatedTravelCards {
+        get;
+        set;
     }
 }

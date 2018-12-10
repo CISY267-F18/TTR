@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 
 public class TTRUIBlocking : MonoBehaviour {
+    private static GameObject button;
+
     private static GameObject[] blocking;
 
     private static Transform CENTER;
@@ -10,6 +12,8 @@ public class TTRUIBlocking : MonoBehaviour {
     void Awake() {
         CENTER = GameObject.FindGameObjectWithTag("center").transform;
 
+        button = GameObject.FindGameObjectWithTag("ui/semidark/button");
+
         // this has to go at the end because you can't find deactivate game objects
         blocking = GameObject.FindGameObjectsWithTag("ui/semidark");
         foreach (GameObject thing in blocking) {
@@ -17,7 +21,28 @@ public class TTRUIBlocking : MonoBehaviour {
         }
     }
 
-    public static void Block(string message, TTRCardTravel[] tc) {
+    // because Unity apparently can't call static methods from the button thing
+    public void CancelBlockInstance() {
+        CancelBlock();
+    }
+
+    public static void CancelBlock() {
+        // copying and pasting code ehh
+        foreach (GameObject thing in blocking) {
+            thing.SetActive(false);
+        }
+
+        GameObject[] textlabels = GameObject.FindGameObjectsWithTag("cityname");
+
+        foreach (GameObject label in textlabels) {
+            label.SetActive(true);
+        }
+
+        TTRBoard.me.Active.EvaluatedTravelCards = true;
+        TTRBoard.me.Active.PositionMyCards(true);
+    }
+
+    public static void Block(string message, TTRCardTravel[] tc, bool showCancel = false) {
         // Pretty sure this can never happen, since you can't do this if there are no cards to
         // be clicked on, but just in case
         if (tc.Length == 0) {
@@ -44,6 +69,10 @@ public class TTRUIBlocking : MonoBehaviour {
 
         focused = tc;
 
+        // normally once you decide to draw a ticket card you have to commit to it, but at the
+        // beginning of the game things are slightly different
+        button.SetActive(showCancel);
+
         // TextMeshes are drawn on top of everything else, even things that are in front of them,
         // because Unity apparentlyd doesn't know what the "3D" part of "3D Text" means.
         // So we just hide them while there's stuff at the forefront of the game because it's
@@ -64,7 +93,7 @@ public class TTRUIBlocking : MonoBehaviour {
         GameObject[] textlabels = GameObject.FindGameObjectsWithTag("cityname");
 
         foreach (GameObject label in textlabels) {
-            label.SetActive(false);
+            label.SetActive(true);
         }
 
         foreach (TTRCardTravel card in focused) {
