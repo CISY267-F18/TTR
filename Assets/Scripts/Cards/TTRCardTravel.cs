@@ -41,6 +41,7 @@ public class TTRCardTravel : MonoBehaviour {
         if (Owner == TTRBoard.me.Active) {
             if (!Owner.EvaluatedTravelCards) {
                 Owner.EvaluatedTravelCards = true;
+                Owner.RemoveTravelCard(this);
                 Owner.PositionMyCards(true);
 
                 // on discard, owner gets set to null, so if you need to do anything with the

@@ -31,6 +31,15 @@ public class TTRPlayer : MonoBehaviour {
         card.Claim(this);
     }
 
+    public void RemoveTravelCard(TTRCardTravel card) {
+        for (int i = 0; i < travel.Contents.Count; i++) {
+            if (travel.Contents[i] == card) {
+                travel.Contents.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
     public void Print() {
         Debug.Log(gameObject.name + "\n" +
             "\tHand cards: " + hand.Print() + "\n" +
