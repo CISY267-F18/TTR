@@ -45,7 +45,7 @@ public class TTRBoard : MonoBehaviour {
     private float boardHeight;
 
     // some other settings
-    private const int playerStartingCards = 18;
+    private const int playerStartingCards = 4;
     private const int playerStartingTravelCardsMax = 3;
     private const int playerStartingTravelCardsMin = 2;
 
