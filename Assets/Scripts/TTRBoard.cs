@@ -371,18 +371,39 @@ public class TTRBoard : MonoBehaviour {
             if (index == -1) {
                 break;
             }
+            // if there are no more cards in the deck, re-shuffle the discard pile
+            if (!deckTrainCards.Has()) {
+                deckTrainCards.Reassemble();
+            }
+            // if there are no more cards in the deck after re-shuffling the discard
+            // pile, just don't bother because there aren't any more cards
+            if (!deckTrainCards.Has()) {
+                break;
+            }
             TTRCardTrain top = deckTrainCards.Draw();
             freeTrainCards[index] = top;
             top.MoveTo(pfaceup.cardPositions[index]);
             top.Revealed = true;
         }
+        // if there are no more cards in either pile and there are three free rainbows,
+        // continually discarding, re-shuffling and re-dealing will give you a lovely
+        // StackOverflowException because it will never end
+        if (RainbowCardCount() > 2 && deckTrainCards.Has() || DeckTrainCardDiscard.Has()) {
+            foreach (TTRCardTrain card in freeTrainCards) {
+                card.Discard();
+                RemoveFreeCard(card, false);
+            }
+            DealFreeCards();
+        }
     }
 
-    public void RemoveFreeCard(TTRCardTrain card) {
+    public void RemoveFreeCard(TTRCardTrain card, bool autodeal = true) {
         for (int i=0; i<freeTrainCards.Length; i++) {
             if (freeTrainCards[i] == card) {
                 freeTrainCards[i] = null;
-                DealFreeCards();
+                if (autodeal) {
+                    DealFreeCards();
+                }
                 return;
             }
         }
@@ -396,6 +417,17 @@ public class TTRBoard : MonoBehaviour {
         }
 
         return -1;
+    }
+
+    private int RainbowCardCount() {
+        int n = 0;
+        foreach (TTRCardTrain card in freeTrainCards) {
+            if (card != null && card.Color.ToLower().Equals("rainbow")) {
+                n++;
+            }
+        }
+
+        return n;
     }
 
     public TTRDeckTrains DeckTrainCards {
