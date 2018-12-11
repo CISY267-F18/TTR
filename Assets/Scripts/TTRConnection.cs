@@ -10,6 +10,8 @@ public class TTRConnection : MonoBehaviour {
 
     private List<GameObject> connectionNodes;
 
+    private TTRConnection partner;
+
     private void Awake() {
         source = null;
         destination = null;
@@ -20,6 +22,17 @@ public class TTRConnection : MonoBehaviour {
         connectionNodes = new List<GameObject>();
 
         Owner = null;
+        partner = null;
+    }
+
+    public void Offset(Vector3 offset) {
+        line.SetPosition(0, line.GetPosition(0) + offset);
+        line.SetPosition(1, line.GetPosition(1) + offset);
+
+        foreach (GameObject clickable in connectionNodes) {
+            Vector3 newPosition = clickable.transform.position + offset;
+            clickable.transform.position = newPosition;
+        }
     }
 
     public void Set(TTRNode source, TTRNode destination, string color, int distance) {
@@ -30,6 +43,22 @@ public class TTRConnection : MonoBehaviour {
         this.destination = destination;
 
         float angle = TTRStatic.AngleBetweenD(source, destination);
+
+        Vector3 offset1 = Vector3.zero;
+        Vector3 offset2 = Vector3.zero;
+        TTRConnection existing=source.ConnectsTo(destination);
+        if (existing != null) {
+            float direction1 = TTRStatic.AngleBetween(existing.Source(), existing.Destination()) + Mathf.PI / 2f;
+            float direction2 = TTRStatic.AngleBetween(existing.Source(), existing.Destination()) - Mathf.PI / 2f;
+            float offsetDistance = 0.25f;
+            offset1 = new Vector3(offsetDistance * Mathf.Cos(direction1), -offsetDistance * Mathf.Sin(direction1), 0f);
+            offset2 = new Vector3(offsetDistance * Mathf.Cos(direction2), -offsetDistance * Mathf.Sin(direction2), 0f);
+
+            existing.Offset(offset1);
+
+            existing.partner = this;
+            partner = existing;
+        }
         
         for (int i = 0; i < distance; i++) {
             GameObject nova = Instantiate(TTRBoard.me.prefabConnectionMarker);
@@ -63,6 +92,8 @@ public class TTRConnection : MonoBehaviour {
         line.endWidth = 0.15f;
         line.material = matConnection;
         line.material.color = Color.Lerp(colorValue, Color.black, 0.15f);
+
+        Offset(offset2);
     }
 
     public void Build(TTRPlayer builder) {
@@ -82,6 +113,14 @@ public class TTRConnection : MonoBehaviour {
             Material novaMat = nova.GetComponentInChildren<MeshRenderer>().material;
             novaMat.color = builder.ColorValue;
         }
+    }
+
+    public TTRNode Source() {
+        return source;
+    }
+
+    public TTRNode Destination() {
+        return destination;
     }
 
     public int Score() {

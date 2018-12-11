@@ -21,4 +21,14 @@ public class TTRNode : MonoBehaviour {
 
         return connection;
     }
+
+    public TTRConnection ConnectsTo(TTRNode other) {
+        foreach (TTRConnection connection in outbound) {
+            if (connection.Source() == other || connection.Destination() == other) {
+                return connection;
+            }
+        }
+
+        return null;
+    }
 }
