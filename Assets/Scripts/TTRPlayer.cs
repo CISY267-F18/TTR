@@ -168,6 +168,13 @@ public class TTRPlayer : MonoBehaviour {
             return null;
         }
 
+        if (TTRBoard.me.PlayerCount < 4) {
+            if (connection.Partner != null && connection.Partner.Owner != null) {
+                TTRUIStatusText.Create("Partner route is already filled!");
+                return null;
+            }
+        }
+
         // do you have the right cards?
         Dictionary<string, int> each = CardCount();
 

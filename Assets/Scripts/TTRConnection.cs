@@ -10,8 +10,6 @@ public class TTRConnection : MonoBehaviour {
 
     private List<GameObject> connectionNodes;
 
-    private TTRConnection partner;
-
     private void Awake() {
         source = null;
         destination = null;
@@ -22,7 +20,7 @@ public class TTRConnection : MonoBehaviour {
         connectionNodes = new List<GameObject>();
 
         Owner = null;
-        partner = null;
+        Partner = null;
     }
 
     public void Offset(Vector3 offset) {
@@ -56,8 +54,8 @@ public class TTRConnection : MonoBehaviour {
 
             existing.Offset(offset1);
 
-            existing.partner = this;
-            partner = existing;
+            existing.Partner = this;
+            Partner = existing;
         }
         
         for (int i = 0; i < distance; i++) {
@@ -137,5 +135,10 @@ public class TTRConnection : MonoBehaviour {
         get {
             return connectionNodes.Count;
         }
+    }
+
+    public TTRConnection Partner {
+        get;
+        private set;
     }
 }

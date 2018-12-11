@@ -469,4 +469,13 @@ public class TTRBoard : MonoBehaviour {
 
         }
     }
+
+    public int PlayerCount {
+        get {
+            return playerCount;
+        }
+        set {
+
+        }
+    }
 }
