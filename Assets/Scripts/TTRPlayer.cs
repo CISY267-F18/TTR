@@ -103,7 +103,7 @@ public class TTRPlayer : MonoBehaviour {
             // todo something with the note that says how many available trains you have remaining
 
             if (!EvaluatedTravelCards) {
-                TTRUIBlocking.BlockTicketClaim("You may discard one of your Travel Cards, if you like", travel.Contents.ToArray(), true);
+                TTRUIBlocking.BlockTicketClaim("You may discard one of your Travel Cards, if you'd like", travel.Contents.ToArray(), true);
             }
         }
     }

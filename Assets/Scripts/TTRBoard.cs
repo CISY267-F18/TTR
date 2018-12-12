@@ -202,6 +202,8 @@ public class TTRBoard : MonoBehaviour {
          */
 
         players = new List<TTRPlayer>();
+        TTRUIBlocking.CancelBlockTicketClaim();
+        TTRUIBlocking.BlockPlayerSelect();
     }
 
     public void Begin(int playerCount) {

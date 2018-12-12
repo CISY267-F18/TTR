@@ -25,10 +25,11 @@ public class TTRUIBlocking : MonoBehaviour {
 
         SetActiveEach(ticketClaimStuff, true);
 
+        focused=new TTRCardTravel[0];
+
         /*
          * player select stuff
          */
-
 
         blockingText = GameObject.FindGameObjectWithTag("ui/text");
         blockingText.SetActive(false);
@@ -59,8 +60,12 @@ public class TTRUIBlocking : MonoBehaviour {
         blockingText.SetActive(false);
         SetActiveEach(ticketClaimStuff, false);
 
-        TTRBoard.me.Active.EvaluatedTravelCards = true;
-        TTRBoard.me.Active.PositionMyCards(true);
+        try {
+            TTRBoard.me.Active.EvaluatedTravelCards = true;
+            TTRBoard.me.Active.PositionMyCards(true);
+        } catch (System.Exception e) {
+            // guess not
+        }
     }
 
     public static void BlockTicketClaim(string message, TTRCardTravel[] tc, bool showCancel = false) {
@@ -75,8 +80,8 @@ public class TTRUIBlocking : MonoBehaviour {
 
         Tint();
 
+        blockingText.SetActive(true);
         blockingText.GetComponent<Text>().text = message;
-        blockingText.SetActive(false);
 
         float half = tc.Length / 2f;
         float separation=12f;
@@ -100,11 +105,18 @@ public class TTRUIBlocking : MonoBehaviour {
         // So we just hide them while there's stuff at the forefront of the game because it's
         // way easier than fighting with Unity to do it "the right way," and nobody's going to
         // notice anyway.
-        GameObject[] textlabels = GameObject.FindGameObjectsWithTag("cityname");
+        
+        SetActiveEach(GameObject.FindGameObjectsWithTag("cityname"), false);
+    }
 
-        foreach (GameObject label in textlabels) {
-            label.SetActive(false);
-        }
+    public static void BlockPlayerSelect() {
+        Tint();
+
+        blockingText.SetActive(true);
+        blockingText.GetComponent<Text>().text = "Who's playing?";
+
+        SetActiveEach(GameObject.FindGameObjectsWithTag("ui/playerselect"), true);
+        SetActiveEach(GameObject.FindGameObjectsWithTag("cityname"), false);
     }
 
     public static void Unblock() {
