@@ -202,9 +202,14 @@ public class TTRBoard : MonoBehaviour {
          */
 
         players = new List<TTRPlayer>();
+    }
+
+    public void Begin(int playerCount) {
+        TTRUIBlocking.Untint();
+        GameObject.FindGameObjectWithTag("ui/playerselect").SetActive(false);
 
         Setup(playerCount);
-        
+
         // for the sake of making everything slightly easier when it comes to animating things,
         // all of the players' cards are where you would physically expect them to be on the board
         // if you were playing the real game, even though there's no other reason to do that

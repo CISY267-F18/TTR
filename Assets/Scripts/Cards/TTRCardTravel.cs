@@ -47,7 +47,7 @@ public class TTRCardTravel : MonoBehaviour {
                 // on discard, owner gets set to null, so if you need to do anything with the
                 // owner do it before you discard the card
                 Discard();
-                TTRUIBlocking.CancelBlock();
+                TTRUIBlocking.CancelBlockTicketClaim();
                 TTRBoard.me.Next();
                 return;
             }
@@ -76,7 +76,7 @@ public class TTRCardTravel : MonoBehaviour {
             drawn[i] = TTRBoard.me.DeckTravelCards.Draw();
         }
 
-        TTRUIBlocking.Block("Choose a travel card.", drawn);
+        TTRUIBlocking.BlockTicketClaim("Choose a travel card.", drawn);
     }
 
     protected void fetchSides() {
