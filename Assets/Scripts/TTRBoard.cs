@@ -203,6 +203,7 @@ public class TTRBoard : MonoBehaviour {
 
         players = new List<TTRPlayer>();
         TTRUIBlocking.CancelBlockTicketClaim();
+        TTRUIBlocking.CancelBlockTicketZoom();
         TTRUIBlocking.BlockPlayerSelect();
     }
 
@@ -296,6 +297,8 @@ public class TTRBoard : MonoBehaviour {
                 player.GrantTravelCard(deckTravelCards.Draw());
             }
         }
+
+        TTRUIBlocking.CancelBlockPlayerSelect();
     }
 
     public Color colorValue(string name) {

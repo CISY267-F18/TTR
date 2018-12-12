@@ -11,7 +11,9 @@ public class TTRUIBlocking : MonoBehaviour {
 
     private static GameObject blockingText;
 
+    // apparently FindGameObject[s]WithTag doesnt work too well with deactivated objects
     private static GameObject[] ticketClaimStuff;
+    private static GameObject[] ticketZoomStuff;
 
     void Awake() {
         CENTER = GameObject.FindGameObjectWithTag("center").transform;
@@ -31,6 +33,12 @@ public class TTRUIBlocking : MonoBehaviour {
          * player select stuff
          */
 
+        /*
+         * ticket zoom stuff
+         */
+
+        ticketZoomStuff = GameObject.FindGameObjectsWithTag("ui/ticketzoom");
+
         blockingText = GameObject.FindGameObjectWithTag("ui/text");
         blockingText.SetActive(false);
         // this has to go at the end because you can't find deactivate game objects
@@ -45,10 +53,6 @@ public class TTRUIBlocking : MonoBehaviour {
     public static void CancelBlockTicketClaim() {
         Unblock();
 
-        GameObject[] textlabels = GameObject.FindGameObjectsWithTag("cityname");
-
-        SetActiveEach(textlabels, true);
-
         foreach (TTRCardTravel card in focused) {
             if (card != null && card.Owner == null) {
                 card.Pending = false;
@@ -57,7 +61,6 @@ public class TTRUIBlocking : MonoBehaviour {
             }
         }
 
-        blockingText.SetActive(false);
         SetActiveEach(ticketClaimStuff, false);
 
         try {
@@ -99,14 +102,6 @@ public class TTRUIBlocking : MonoBehaviour {
         // normally once you decide to draw a ticket card you have to commit to it, but at the
         // beginning of the game things are slightly different
         buttonTicketClaim.SetActive(showCancel);
-
-        // TextMeshes are drawn on top of everything else, even things that are in front of them,
-        // because Unity apparentlyd doesn't know what the "3D" part of "3D Text" means.
-        // So we just hide them while there's stuff at the forefront of the game because it's
-        // way easier than fighting with Unity to do it "the right way," and nobody's going to
-        // notice anyway.
-        
-        SetActiveEach(GameObject.FindGameObjectsWithTag("cityname"), false);
     }
 
     public static void BlockPlayerSelect() {
@@ -116,17 +111,48 @@ public class TTRUIBlocking : MonoBehaviour {
         blockingText.GetComponent<Text>().text = "Who's playing?";
 
         SetActiveEach(GameObject.FindGameObjectsWithTag("ui/playerselect"), true);
-        SetActiveEach(GameObject.FindGameObjectsWithTag("cityname"), false);
+    }
+
+    public void CancelBlockPlayerSelectInstance() {
+        CancelBlockPlayerSelect();
+    }
+
+    public static void CancelBlockPlayerSelect() {
+        Unblock();
+    }
+
+    public static void BlockTicketZoom(TTRCardTravel card) {
+        Tint();
+
+        blockingText.SetActive(true);
+        blockingText.GetComponent<Text>().text = "Travel Card: " + card.Source.name + " to " + card.Destination.name;
+
+        card.MoveTo(CENTER.position, CENTER.rotation, CENTER.localScale * 1.8f);
+
+        SetActiveEach(ticketZoomStuff, true);
+    }
+
+    public void CancelBlockTicketZoomInstance() {
+        CancelBlockTicketZoom();
+    }
+
+    public static void CancelBlockTicketZoom() {
+        Unblock();
+
+        try {
+            TTRBoard.me.Active.PositionMyCards();
+        } catch (System.Exception e) {
+            // guess not
+        }
+
+        SetActiveEach(ticketZoomStuff, false);
     }
 
     public static void Unblock() {
         // don't do anything specific in here, just remove the screen tint and
         // replace the city name labels
         Untint();
-
-        GameObject[] textlabels = GameObject.FindGameObjectsWithTag("cityname");
-
-        SetActiveEach(textlabels, true);
+        blockingText.SetActive(false);
     }
 
     public static bool IsBlocked() {
@@ -135,10 +161,17 @@ public class TTRUIBlocking : MonoBehaviour {
 
     public static void Tint() {
         tint.SetActive(true);
+        // TextMeshes are drawn on top of everything else, even things that are in front of them,
+        // because Unity apparently doesn't know what the "3D" part of "3D Text" means.
+        // So we just hide them while there's stuff at the forefront of the game because it's
+        // way easier than fighting with Unity to do it "the right way," and nobody's going to
+        // notice anyway.
+        SetActiveEach(GameObject.FindGameObjectsWithTag("cityname"), false);
     }
 
     public static void Untint() {
         tint.SetActive(false);
+        SetActiveEach(GameObject.FindGameObjectsWithTag("cityname"), true);
     }
 
     public static void SetActiveEach(GameObject[] objects, bool active) {

@@ -2,8 +2,6 @@
 using UnityEngine;
 
 public class TTRCardTravel : MonoBehaviour {
-    private TTRNode source;
-    private TTRNode destination;
     private int points;
 
     private GameObject front;
@@ -16,8 +14,8 @@ public class TTRCardTravel : MonoBehaviour {
     public static TTRCardTravel Spawn(TTRNode source, TTRNode destination, int points) {
         TTRCardTravel ct = Instantiate(TTRBoard.me.prefabCard).AddComponent<TTRCardTravel>();
         ct.name = source.name + "-" + destination.name;
-        ct.source = source;
-        ct.destination = destination;
+        ct.Source = source;
+        ct.Destination = destination;
         ct.points = points;
 
         ct.fetchSides();
@@ -39,7 +37,9 @@ public class TTRCardTravel : MonoBehaviour {
         }
 
         if (Owner == TTRBoard.me.Active) {
-            if (!Owner.EvaluatedTravelCards) {
+            if (Owner.EvaluatedTravelCards) {
+                TTRUIBlocking.BlockTicketZoom(this);
+            } else {
                 Owner.EvaluatedTravelCards = true;
                 Owner.RemoveTravelCard(this);
                 Owner.PositionMyCards(true);
@@ -49,8 +49,8 @@ public class TTRCardTravel : MonoBehaviour {
                 Discard();
                 TTRUIBlocking.CancelBlockTicketClaim();
                 TTRBoard.me.Next();
-                return;
             }
+            return;
         }
         // if the card is available for claim, claim it, discard the other(s) and continue
         if (Pending) {
@@ -91,7 +91,7 @@ public class TTRCardTravel : MonoBehaviour {
     }
 
     protected void SetCardTexture() {
-        string key = (source.name + destination.name).Replace(" ", "");
+        string key = (Source.name + Destination.name).Replace(" ", "");
 
         if (!cardTextures.ContainsKey(key)) {
             cardTextures.Add(key, Resources.Load<Texture2D>("Cards/Travel/" + key));
@@ -168,6 +168,16 @@ public class TTRCardTravel : MonoBehaviour {
     }
 
     public TTRPlayer Owner {
+        get;
+        private set;
+    }
+
+    public TTRNode Source {
+        get;
+        private set;
+    }
+
+    public TTRNode Destination {
         get;
         private set;
     }
