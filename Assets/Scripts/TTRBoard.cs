@@ -306,9 +306,11 @@ public class TTRBoard : MonoBehaviour {
 
     private void BeginTurn(int index) {
         TTRUIStatusText.Create(players[index].name + " is now acting");
-
+        
         ActiveIndex = index;
         TTRPlayer.PositionAllCards(true, players[index]);
+
+        TTRConnection.GlowOn(players[index]);
     }
 
     public void Next() {

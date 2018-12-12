@@ -7,10 +7,15 @@ public class TTRConnection : MonoBehaviour {
     private TTRNode source;
     private TTRNode destination;
     private LineRenderer line;
-
+    
     private List<GameObject> connectionNodes;
 
+    private static List<TTRConnection> all = new List<TTRConnection>();
+    private static Color lineAvailableColor=new Color(0xff, 0xc0, 0x00);
+
     private void Awake() {
+        all.Add(this);
+
         source = null;
         destination = null;
         line = null;
@@ -89,7 +94,9 @@ public class TTRConnection : MonoBehaviour {
         line.startWidth = 0.15f;
         line.endWidth = 0.15f;
         line.material = matConnection;
-        line.material.color = Color.Lerp(colorValue, Color.black, 0.15f);
+        line.material.color = Color.black;
+        line.startColor = Color.black;
+        line.endColor = Color.black;
 
         Offset(offset2);
     }
@@ -110,6 +117,34 @@ public class TTRConnection : MonoBehaviour {
 
             Material novaMat = nova.GetComponentInChildren<MeshRenderer>().material;
             novaMat.color = builder.ColorValue;
+        }
+    }
+
+    private void GlowMeOn() {
+        line.material.color = Color.white;
+        line.startColor = Color.white;
+        line.endColor = Color.white;
+    }
+
+    public void GlowMeOff() {
+        line.material.color = Color.black;
+        line.startColor = Color.black;
+        line.endColor = Color.black;
+    }
+
+    public static void GlowOn(TTRPlayer player){
+        foreach (TTRConnection connection in all) {
+            if (player.CanBuild(connection, false) == null) {
+                connection.GlowMeOff();
+            } else {
+                connection.GlowMeOn();
+            }
+        }
+    }
+
+    public static void GlowOff() {
+        foreach (TTRConnection connection in all) {
+            connection.GlowMeOff();
         }
     }
 

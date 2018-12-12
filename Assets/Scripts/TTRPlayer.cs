@@ -154,28 +154,36 @@ public class TTRPlayer : MonoBehaviour {
 
     // todo document the way this returns the color of the card that can build on
     // the connection, or null if one does not exist
-    public string CanBuild(TTRConnection connection) {
+    public string CanBuild(TTRConnection connection, bool showStatusText = true) {
         // has already drawn a card?
         if (!FirstDraw) {
-            TTRUIStatusText.Create("Already committed to drawing cards!");
+            if (showStatusText) {
+                TTRUIStatusText.Create("Already committed to drawing cards!");
+            }
             return null;
         }
 
         // already owned?
         if (connection.Owner != null) {
-            TTRUIStatusText.Create("Already owned by " + connection.Owner.name + "!");
+            if (showStatusText) {
+                TTRUIStatusText.Create("Already owned by " + connection.Owner.name + "!");
+            }
             return null;
         }
 
         // not enough trains?
         if (connection.Distance > freeTrains) {
-            TTRUIStatusText.Create("Not enough trains!");
+            if (showStatusText) {
+                TTRUIStatusText.Create("Not enough trains!");
+            }
             return null;
         }
 
         if (TTRBoard.me.PlayerCount < 4) {
             if (connection.Partner != null && connection.Partner.Owner != null) {
-                TTRUIStatusText.Create("Partner route is already filled!");
+                if (showStatusText) {
+                    TTRUIStatusText.Create("Partner route is already filled!");
+                }
                 return null;
             }
         }
@@ -200,7 +208,9 @@ public class TTRPlayer : MonoBehaviour {
             }
         }
 
-        TTRUIStatusText.Create("Not enough train cards!");
+        if (showStatusText) {
+            TTRUIStatusText.Create("Not enough train cards!");
+        }
         return null;
     }
 
@@ -265,6 +275,7 @@ public class TTRPlayer : MonoBehaviour {
 
     public void FirstDrawExecute() {
         TTRUIStatusText.Create(name + " may draw another card");
+        TTRConnection.GlowOff();
         FirstDraw = false;
     }
 
