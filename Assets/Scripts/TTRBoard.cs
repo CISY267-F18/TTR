@@ -36,7 +36,6 @@ public class TTRBoard : MonoBehaviour {
     private const string gdTravelRoutes = "Assets/Data/travelcards.csv";
     private const string gdConnections = "Assets/Data/connections.csv";
     private const string gdNodes = "Assets/Data/cities.csv";
-    private const string gdSettings = "Assets/Data/settings.txt";
     private const string gdColors = "Assets/Data/colors.csv";
     private const string gdTrainCards = "Assets/Data/deck.csv";
 
@@ -106,7 +105,6 @@ public class TTRBoard : MonoBehaviour {
 
         }
 
-        List<string> settings = TTRStatic.ReadText(gdSettings);
         boardWidth = transform.localScale.x;
         boardHeight = transform.localScale.y;
 
@@ -136,8 +134,9 @@ public class TTRBoard : MonoBehaviour {
             try {
                 cpd.Add(value, GameObject.FindGameObjectWithTag("screen/active/" + value.ToLower()).transform);
             }
+            #pragma warning disable 0168
             catch (System.Exception e) {
-                Debug.Log("guess the tag " + "screen/active/" + value.ToLower() + " doesn't exist: " + e);
+                Debug.Log("guess the tag " + "screen/active/" + value.ToLower() + " doesn't exist");
             }
         }
 

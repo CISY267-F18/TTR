@@ -66,6 +66,7 @@ public class TTRUIBlocking : MonoBehaviour {
         try {
             TTRBoard.me.Active.EvaluatedTravelCards = true;
             TTRBoard.me.Active.PositionMyCards(true);
+        #pragma warning disable 0168
         } catch (System.Exception e) {
             // guess not
         }
@@ -141,6 +142,7 @@ public class TTRUIBlocking : MonoBehaviour {
 
         try {
             TTRBoard.me.Active.PositionMyCards();
+        #pragma warning disable 0168
         } catch (System.Exception e) {
             // guess not
         }
