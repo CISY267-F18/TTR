@@ -5,7 +5,10 @@ public class TTRNode : MonoBehaviour {
 
     private List<TTRConnection> outbound;
 
+    private static List<TTRNode> all = new List<TTRNode>();
+
     void Awake() {
+        all.Add(this);
         outbound = new List<TTRConnection>();
     }
 
@@ -30,5 +33,19 @@ public class TTRNode : MonoBehaviour {
         }
 
         return null;
+    }
+
+    public void GlowOn() {
+        transform.Find("Halo").gameObject.SetActive(true);
+    }
+
+    public void GlowOff() {
+        transform.Find("Halo").gameObject.SetActive(false);
+    }
+
+    public static void GlowOffAll() {
+        foreach (TTRNode node in all) {
+            node.GlowOff();
+        }
     }
 }

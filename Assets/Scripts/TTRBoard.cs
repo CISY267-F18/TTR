@@ -312,6 +312,7 @@ public class TTRBoard : MonoBehaviour {
     }
 
     public void Next() {
+        TTRNode.GlowOffAll();
         BeginTurn(++ActiveIndex % players.Count);
     }
 

@@ -38,6 +38,9 @@ public class TTRCardTravel : MonoBehaviour {
 
         if (Owner == TTRBoard.me.Active) {
             if (Owner.EvaluatedTravelCards) {
+                TTRNode.GlowOffAll();
+                Source.GlowOn();
+                Destination.GlowOn();
                 TTRUIBlocking.BlockTicketZoom(this);
             } else {
                 Owner.EvaluatedTravelCards = true;
