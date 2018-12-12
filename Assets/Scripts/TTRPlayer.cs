@@ -66,6 +66,11 @@ public class TTRPlayer : MonoBehaviour {
 
         }
         else {
+            GameObject trainCounter = GameObject.FindGameObjectWithTag("screen/active/trains");
+            trainCounter.transform.Find("Count").GetComponent<TextMesh>().text = "+" + freeTrains;
+            Material trainCounterMat = trainCounter.transform.Find("train").GetComponent<MeshRenderer>().material;
+            trainCounterMat.color = ColorValue;
+
             TTRBoard board = TTRBoard.me;
             for (int i = 0; i < travel.Contents.Count; i++) {
                 TTRCardTravel tc=travel.Contents[i];
