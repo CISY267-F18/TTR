@@ -237,6 +237,7 @@ public class TTRPlayer : MonoBehaviour {
         // do the actual removal
         foreach (TTRCardTrain c in toRemove) {
             hand.RemoveCard(c);
+            TTRBoard.me.DiscardAndReshuffle(c);
         }
     }
 

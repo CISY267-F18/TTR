@@ -13,6 +13,7 @@ public class TTRDeckTrains : MonoBehaviour {
 
     public void AddCard(TTRCardTrain card) {
         contents.Add(card);
+        card.Unclaim();
         card.transform.SetParent(this.transform);
     }
 
@@ -73,5 +74,13 @@ public class TTRDeckTrains : MonoBehaviour {
 
     public int NonRainbowCount() {
         return contents.Count - RainbowCount();
+    }
+
+    public int Size() {
+        return contents.Count;
+    }
+
+    public List<TTRCardTrain> Stuff() {
+        return contents;
     }
 }

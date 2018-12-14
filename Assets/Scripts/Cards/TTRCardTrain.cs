@@ -62,7 +62,7 @@ public class TTRCardTrain : MonoBehaviour {
                 active.GrantTrainCard(this);
                 active.PositionMyCards();
 
-                TTRBoard.me.RemoveFreeCard(this);
+                TTRBoard.me.DeckTrainCards.Draw(/*this*/);
 
                 // no players in their right mind will ever let this happen though
                 if (active.FirstDraw) {
@@ -140,6 +140,10 @@ public class TTRCardTrain : MonoBehaviour {
         if (claimant == TTRBoard.me.Active) {
 
         } // i don't know if it's possible to do this otherwise
+    }
+
+    public void Unclaim() {
+        owner = null;
     }
 
     public void Discard() {

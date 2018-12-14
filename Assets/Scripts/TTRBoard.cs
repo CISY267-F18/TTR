@@ -44,7 +44,7 @@ public class TTRBoard : MonoBehaviour {
     private float boardHeight;
 
     // some other settings
-    private const int playerStartingCards = 4;
+    private const int playerStartingCards = 18;
     private const int playerStartingTravelCardsMax = 3;
     private const int playerStartingTravelCardsMin = 2;
 
@@ -401,12 +401,18 @@ public class TTRBoard : MonoBehaviour {
         // continually discarding, re-shuffling and re-dealing will give you a lovely
         // StackOverflowException because it will never end
         if (RainbowCardCount() > 2 && (deckTrainCards.NonRainbowCount() + DeckTrainCardDiscard.NonRainbowCount()) > 2) {
-            foreach (TTRCardTrain card in freeTrainCards) {
+            ReshuffleTrains();
+        }
+    }
+    
+    public void ReshuffleTrains() {
+        foreach (TTRCardTrain card in freeTrainCards) {
+            if (card != null) {
                 card.Discard();
                 RemoveFreeCard(card, false);
             }
-            DealFreeCards();
         }
+        DealFreeCards();
     }
 
     public void RemoveFreeCard(TTRCardTrain card, bool autodeal = true) {
@@ -444,6 +450,18 @@ public class TTRBoard : MonoBehaviour {
 
     public bool ThereAreAnyFreeNonRainbowCards() {
         return (freeTrainCards.Length - RainbowCardCount()) > 0;
+    }
+
+    public void DiscardAndReshuffle(TTRCardTrain card) {
+        DeckTrainCardDiscard.AddCard(card);
+        if (DeckTrainCards.Size() == 0) {
+            foreach (TTRCardTrain c in freeTrainCards) {
+                if (c != null) {
+                    return;
+                }
+            }
+            ReshuffleTrains();
+        }
     }
 
     public TTRDeckTrains DeckTrainCards {
